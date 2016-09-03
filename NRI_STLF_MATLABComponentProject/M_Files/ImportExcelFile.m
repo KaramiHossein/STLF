@@ -1,8 +1,9 @@
 % ImportData
-function ImportExcelFile(address,yy,mm,dd)
+function ImportExcelFile(AppPath,address,yy,mm,dd)
 DailyData=xlsread(address,'„‰«ÿﬁ');
 
-cd('LoadData');
+loadDataPath=[AppPath,'\LoadData'];
+cd(loadDataPath);
 name1=['L_TotalManategh',num2str(yy),'.xls'];
 
 ZoneData=xlsread(name1,'Tehran');
