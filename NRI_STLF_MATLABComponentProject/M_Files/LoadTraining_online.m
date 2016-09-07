@@ -78,7 +78,7 @@ elseif Adays(k,1)>16 && mm==1 && (dd==3 || dd==2)
     end
     daysnums=daysnums(find(daysnums>49));
         
-elseif (Adays(k,1)==0 || Adays(k,1)>16) && mm==1 && (dd>=15 || dd<=21)
+elseif (Adays(k,1)==0 || Adays(k,1)>16) && mm==1 && (dd>=15 && dd<=21)
     IND3=find((A(:,2)==mm).*max(A(:,3)>=15,A(:,3)<=21).*(daytypes(1:k-1,1)==daytypes(k,1)).*(Adays(1:k-1,1)==Adays(k,1)).*(daysramezan(1:k-1,1)==daysramezan(k,1)));
     
     if length(IND3)<5
@@ -98,6 +98,27 @@ elseif (Adays(k,1)==0 || Adays(k,1)>16) && mm==1 && (dd>=15 || dd<=21)
         FLAG=0;
     end
     daysnums=daysnums(find(daysnums>49));
+        
+% elseif (Adays(k,1)==0 || Adays(k,1)>16) && mm==1 && (dd>=6 || dd<=11)
+%     IND3=find((A(:,2)==mm).*max(A(:,3)>=6,A(:,3)<=11).*(daytypes(1:k-1,1)==daytypes(k,1)).*(Adays(1:k-1,1)==Adays(k,1)).*(daysramezan(1:k-1,1)==daysramezan(k,1)));
+%     
+%     if length(IND3)<5
+% %         warndlg('Please Eneter More Data By Choosing Less First Year. The Results Maybe Inaccurate.','Increase Data')
+%     end
+%     daysnums=[];
+%     for I1=1:length(IND3)
+%         daysnums=[daysnums,[((IND3(I1)-1)*24+1):IND3(I1)*24]];
+%     end
+%     INPUTsNUM=[1;2;3;23;24;25;];
+%     if ~isempty(TT2)
+%         TempNUM=[0,24];
+%     end
+%     if length(IND3)<5
+%         FLAG=1;
+%     else
+%         FLAG=0;
+%     end
+%     daysnums=daysnums(find(daysnums>25));
 elseif Adays(k,1)>16 && mm==1 && (dd==4)
     IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(A(:,4)==A(end-6,4)));
     if length(IND3)<5
@@ -238,7 +259,7 @@ else
     end
     daysnums2=daysnums(1,IND2);
     daysnums(IND2)=[];
-    if (Adaysfinal(end-23)~=0)||(Adaysfinal(end-24)~=0)||(Adaysfinal(end-25)~=0)
+    if SPECIAL==1 || (Adaysfinal(end-23)~=0)||(Adaysfinal(end-24)~=0)||(Adaysfinal(end-25)~=0)
         daysnums=[daysnums2 daysnums];
     else
         daysnums=[daysnums2 ];
@@ -257,9 +278,9 @@ for j=1:regrs_num
 end
 tt=[];
 if ~isempty(regrs_Temp)
-    for k=1:size(TT,1)
+    for k2=1:size(TT,1)
         for j=1:regrs_Temp
-            tt=[tt;TT(k,daysnums-TempNUM(j))];
+            tt=[tt;TT(k2,daysnums-TempNUM(j))];
         end
     end
 end
@@ -269,15 +290,13 @@ end
 ss=[ss;tt];
 if FLAG==1 
     [ss2,y12]=ITLMSfunction(ss,y1);
-    %     if sum(sum(isnan(ss2)))>0
-    %         [ss2,y12]=ITLMSfunction2(ss,y1);
-    %     end
-    if sum(sum(isnan(ss2)))>0
+    if sum(sum(isnan(ss2)))>0 || sum(sum(isnan(y12)))>0 
         ss=ss;y1=y1;
     else
         ss=ss2;y1=y12;
     end
 end
+
 % ss=[ss ss];
 % y1=[y1 y1];
 n=length(y1);
