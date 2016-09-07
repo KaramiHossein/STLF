@@ -36,7 +36,7 @@ for I=1:length(corp.zone)
         end
         
         
-        [Indtesta,net,INPUTsNUM,TempNUM]=LoadTraining_online(SPECIAL,yy,mm,dd,A(1:k-1,:),BB,InputData,k);
+        [Indtesta,net,INPUTsNUM,TempNUM]=LoadTraining_online(SPECIAL,A(k,1),A(k,2),A(k,3),A(1:k-1,:),BB,InputData,k);
         
         % etelaate bare roze morde nazar ra dar AToday migozarad , agar data
         % mojod nabod bejash NAN migozarad
