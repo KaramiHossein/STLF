@@ -22,7 +22,7 @@ for z=1:zoneNo
     yy2 =yy;
     lsys=InputData.lsyszone{1,z};
     weatherdata=InputData.weatherzone{1,z};
-
+    
     if isempty(weatherdata.temp)
         weatherdata=weatherdata.temp;%%% must change!!!!!!
     else
@@ -33,15 +33,23 @@ for z=1:zoneNo
     errorsZ=[];
     for k=lct:lct+days-1
         [prediction]=BNNpredict(lsys(1:k-1,:),yy2,mm2,dd2,weatherdata,calH,calD,Ghcal);
-
+        
         actual=InputData.lsyszone{1,z}(k,6:29);
-        [mapes, errors] = calcError(prediction, actual,mm2);
+        if sum(lsys(k,6:29)==0)>0 && sum(lsys(k,6:29)~=0)<24
+            prediction(1,1:sum(lsys(k,6:29)==0))=lsys(k,6:5+sum(lsys(k,6:29)==0));
+            mapes=[];
+            errors=[];
+        else
+            [mapes, errors] = calcError(prediction, actual,mm2);
+        end
+        
         lsys(k,6:29)=prediction;
-
+        
+        
         predictionZ=[predictionZ; prediction];
         mapesZ=[mapesZ;mapes];
         errorsZ=[errorsZ;errors];
-
+        
         if (k<size(InputData.lsyszone{1,z},1))
             dd2=lsys(k+1,3);
             mm2=lsys(k+1,2);
