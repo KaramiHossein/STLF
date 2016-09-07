@@ -259,7 +259,7 @@ else
     end
     daysnums2=daysnums(1,IND2);
     daysnums(IND2)=[];
-    if (Adaysfinal(end-23)~=0)||(Adaysfinal(end-24)~=0)||(Adaysfinal(end-25)~=0)
+    if SPECIAL==1 || (Adaysfinal(end-23)~=0)||(Adaysfinal(end-24)~=0)||(Adaysfinal(end-25)~=0)
         daysnums=[daysnums2 daysnums];
     else
         daysnums=[daysnums2 ];
