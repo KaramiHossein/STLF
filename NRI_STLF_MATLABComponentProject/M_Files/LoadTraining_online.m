@@ -55,6 +55,27 @@ if SPECIAL==0 && mm==1 && dd==14
         FLAG=0;
     end
     
+elseif SPECIAL==0 && mm==6 && dd==31
+    IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(Adays(1:k-1,:)==0).*(A(:,4)==A(end-6,4)));
+    if length(IND3)<5
+        IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(Adays(1:k-1,:)==0));
+    end
+    if length(IND3)<5
+%         warndlg('Please Eneter More Data By Choosing Less First Year. The Results Maybe Inaccurate.','Increase Data')
+    end
+    daysnums=[];
+    for I1=1:length(IND3)
+        daysnums=[daysnums,[((IND3(I1)-1)*24+1):IND3(I1)*24]];
+    end
+    INPUTsNUM=[1;2;3;23;24;25];
+    if ~isempty(TT2)
+        TempNUM=[0,24];
+    end
+    if length(IND3)<5
+        FLAG=1;
+    else
+        FLAG=0;
+    end    
 elseif Adays(k,1)>16 && mm==1 && (dd==3 || dd==2)
     IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(A(:,4)==A(end-6,4)));
     if length(IND3)<5
