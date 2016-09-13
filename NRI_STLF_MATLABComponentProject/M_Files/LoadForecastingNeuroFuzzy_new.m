@@ -17,7 +17,7 @@ for I=1:length(corp.zone)
     end
     
     i=find((A(:,1)==yy)&(A(:,2)==mm)&(A(:,3)==dd));
-    
+    A2=A;
     predictionfa=[];
     mapesfa=[];
     
@@ -31,23 +31,27 @@ for I=1:length(corp.zone)
         
         if isempty(TT)
             BB=[];
+            TAToday=[];
         else
             BB=TT(1:k-1,:);
+            TAToday=TT(k,:);
+        end
+        if sum(A2(k,6:29)>0)>0 && sum(A2(k,6:29)>0)<24
+            A2(k,(6+sum(A2(k,6:29)>0)):29)=nan(1,24-sum(A2(k,6:29)>0));
+        else
+            A2(k,6:29)=nan(1,24);
         end
         
         
-        [Indtesta,net,INPUTsNUM,TempNUM]=LoadTraining_online(SPECIAL,A(k,1),A(k,2),A(k,3),A(1:k-1,:),BB,InputData,k);
+        [Indtesta,net,INPUTsNUM,TempNUM]=LoadTraining_online(SPECIAL,A2(k,1),A2(k,2),A2(k,3),A2(1:k-1,:),BB,InputData,k,A2(k,6:29),TAToday);
         
         % etelaate bare roze morde nazar ra dar AToday migozarad , agar data
         % mojod nabod bejash NAN migozarad
-        AToday = A(k,6:29);
-        if sum(isnan(AToday))==0
-            AToday =nan(1,24);
-        end
+        
         if ~isempty(TT)
             BB=TT(1:k,:);
         end
-        [prediction]=NeuroFuzzypredict_Final(net,TempNUM,INPUTsNUM,A(1:k-1,:),BB,AToday);
+        [prediction]=NeuroFuzzypredict_Final(net,TempNUM,INPUTsNUM,A2(1:k-1,:),BB,A2(k,6:29));
         
         if sum(isnan(A(k,6:29)))==0
             mape=100*mean(abs(prediction-A(k,6:29))./A(k,6:29)); % motavaset khataye nesbi pishbini ra neshan midahad
@@ -75,7 +79,7 @@ for I=1:length(corp.zone)
             mapelow=[];
             errors=[];
         end
-        A(k,6:29)=prediction;
+        A2(k,6:29)=prediction;
         predictionfa=[predictionfa; prediction];
         %     Aa(k,6:29)=prediction;
         mapes=[mape;mapepeak;mapeord;mapelow];

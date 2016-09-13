@@ -1,4 +1,4 @@
-function [Indtesta,net,INPUTsNUM,TempNUM]=LoadTraining_online(SPECIAL,yy,mm,dd,A,TT2,InputData,k)
+function [Indtesta,net,INPUTsNUM,TempNUM]=LoadTraining_online(SPECIAL,yy,mm,dd,A,TT2,InputData,k,AToday,TAToday)
 
 numberofneurons=15;
 smothing_factor=1/3;
@@ -55,6 +55,27 @@ if SPECIAL==0 && mm==1 && dd==14
         FLAG=0;
     end
     
+elseif SPECIAL==0 && mm==6 && dd==31
+    IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(Adays(1:k-1,:)==0).*(A(:,4)==A(end-6,4)));
+    if length(IND3)<5
+        IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(Adays(1:k-1,:)==0));
+    end
+    if length(IND3)<5
+%         warndlg('Please Eneter More Data By Choosing Less First Year. The Results Maybe Inaccurate.','Increase Data')
+    end
+    daysnums=[];
+    for I1=1:length(IND3)
+        daysnums=[daysnums,[((IND3(I1)-1)*24+1):IND3(I1)*24]];
+    end
+    INPUTsNUM=[1;2;3;23;24;25];
+    if ~isempty(TT2)
+        TempNUM=[0,24];
+    end
+    if length(IND3)<5
+        FLAG=1;
+    else
+        FLAG=0;
+    end    
 elseif Adays(k,1)>16 && mm==1 && (dd==3 || dd==2)
     IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(A(:,4)==A(end-6,4)));
     if length(IND3)<5
@@ -236,8 +257,7 @@ else
     else
         daysnumsaa=find(Adaysfinal==Adays(end));
     end
-    daysnumsbb=find(daysnumsaa>171);
-    daysnums=daysnumsaa(daysnumsbb);
+    daysnums=daysnumsaa(find(daysnumsaa>max(INPUTsNUM)));
     
     % II=[];
     % for I1=1:size(daysnums,2)
@@ -268,6 +288,11 @@ else
 end
 if SPECIAL==1 
     FLAG=1;
+end
+OldSize=size(CC,2);ReformedSize=sum(AToday>0);CC=[CC,AToday(1:ReformedSize)];
+daysnums=[OldSize+1:OldSize+ReformedSize daysnums ];
+if ~isempty(TT2) && sum(AToday>0)>0
+    TT=[TT,ones(1,ReformedSize)*TAToday(1,7)];
 end
 y1=CC(daysnums);
 regrs_num=length(INPUTsNUM);
