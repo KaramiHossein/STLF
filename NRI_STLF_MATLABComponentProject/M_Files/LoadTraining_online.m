@@ -1,4 +1,4 @@
-function [Indtesta,net,INPUTsNUM,TempNUM]=LoadTraining_online(SPECIAL,yy,mm,dd,A,TT2,InputData,k)
+function [Indtesta,net,INPUTsNUM,TempNUM]=LoadTraining_online(SPECIAL,yy,mm,dd,A,TT2,InputData,k,AToday,TAToday)
 
 numberofneurons=15;
 smothing_factor=1/3;
@@ -236,8 +236,7 @@ else
     else
         daysnumsaa=find(Adaysfinal==Adays(end));
     end
-    daysnumsbb=find(daysnumsaa>171);
-    daysnums=daysnumsaa(daysnumsbb);
+    daysnums=daysnumsaa(find(daysnumsaa>max(INPUTsNUM)));
     
     % II=[];
     % for I1=1:size(daysnums,2)
@@ -268,6 +267,11 @@ else
 end
 if SPECIAL==1 
     FLAG=1;
+end
+OldSize=size(CC,2);ReformedSize=sum(AToday>0);CC=[CC,AToday(1:ReformedSize)];
+daysnums=[OldSize+1:OldSize+ReformedSize daysnums ];
+if ~isempty(TT2) && sum(AToday>0)>0
+    TT=[TT,ones(1,ReformedSize)*TAToday(1,7)];
 end
 y1=CC(daysnums);
 regrs_num=length(INPUTsNUM);
