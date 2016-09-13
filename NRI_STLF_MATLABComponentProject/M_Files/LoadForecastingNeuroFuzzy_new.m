@@ -51,7 +51,7 @@ for I=1:length(corp.zone)
         if ~isempty(TT)
             BB=TT(1:k,:);
         end
-        [prediction]=NeuroFuzzypredict_Final(net,TempNUM,INPUTsNUM,A(1:k-1,:),BB,A2(k,6:29));
+        [prediction]=NeuroFuzzypredict_Final(net,TempNUM,INPUTsNUM,A2(1:k-1,:),BB,A2(k,6:29));
         
         if sum(isnan(A(k,6:29)))==0
             mape=100*mean(abs(prediction-A(k,6:29))./A(k,6:29)); % motavaset khataye nesbi pishbini ra neshan midahad
