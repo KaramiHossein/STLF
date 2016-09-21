@@ -1,8 +1,25 @@
-function [Pn,Tn]=ITLMSfunction(P,T)
-% XX=[PP;TT];
+function [Pn,Tn]=ITLMSfunction(P,T,num)
+%% Addidg Code by Mostafa Gholami
+% ITLMS Code to Densification of Database
+if nargin == 3
+    PP=P(:,num);
+    TT=T(:,num);
+    num0=[];
+    for i=1:size(P,2)
+        if isempty(find(num == i)) == 1
+            num0=[num0,i];
+        end
+    end
+    if size(num,2) == size(P,2)
+        num0=num;
+    end
+else
+    PP=P;
+    TT=T;
+end
+XX=[PP;TT];
     X0DB=[P;T];
-    XX=X0DB;
-    Landa=0.01;
+    Landa=0.1;
     stdev=std(X0DB',1);
     stdevp=stdev*sqrt(2);
     VX=0;
@@ -23,7 +40,6 @@ function [Pn,Tn]=ITLMSfunction(P,T)
             VX=VX+exp(Gind/-2);
         end
     end
-%     keyboard
     VX=VX/size(XX,2)^2;
     VXX0=VXX0/(size(XX,2)*size(X0DB,2));
     c1=(1-Landa)/VX;
@@ -61,14 +77,11 @@ function [Pn,Tn]=ITLMSfunction(P,T)
         XNEW=[XNEW,Xnew];
         XX=Xnew;
         maxerror=max(error);
-        if size(XNEW,2)>300
-            maxerror=1e-9;
-        end
     end
-    
-    
-    
-    %%
-    Pn=[P,XNEW(1:size(P,1),:)];
-    Tn=[T,XNEW(size(P,1)+1:end,:)];
-end
+    if nargin==3
+        Pn=[P(:,num0),XNEW(1:size(P,1),:)];
+        Tn=[T(:,num0),XNEW(size(P,1)+1:end,:)];
+    else
+        Pn=[P,XNEW(1:size(P,1),:)];
+        Tn=[T,XNEW(size(P,1)+1:end,:)];
+    end
