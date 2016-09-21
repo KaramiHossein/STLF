@@ -237,7 +237,7 @@ else
     daysramezanfinal=reshape(daysramezan2',1,24*size(daysramezan2,1));
     
     
-    if (Adaysfinal(end-167)~=0)||(Adaysfinal(end-168)~=0)||(Adaysfinal(end-169)~=0)
+    if SPECIAL~=1 && ((Adaysfinal(end-167)~=0)||(Adaysfinal(end-168)~=0)||(Adaysfinal(end-169)~=0))
         INPUTsNUM=[1;2;3;23;24;25;47;48;49];
         [Adays,daytypes,daysramezan]=DayType2(InputData);
         Adays=Adays(1:k,:);
