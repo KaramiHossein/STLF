@@ -54,7 +54,7 @@ X=[(lsys((fft(i)-1)*24-23:(fft(i)-1)*24)-lsys((fft(i)-1)*24-47:(fft(i)-1)*24-24)
     if isempty(num)==1
         num=1:size(P,2);
     end
-    [P,T]=ITLMSfunction(P,T);
+    [P,T]=ITLMSfunction(P,T,num);
     
     %%
     [Pn,minp,maxp,Tn,mint,maxt] = premnmx(P,T);
