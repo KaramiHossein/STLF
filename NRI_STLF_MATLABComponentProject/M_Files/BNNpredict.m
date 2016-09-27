@@ -27,7 +27,7 @@ end
 
 lsys=reshape(lsys(:,6:29)',size(lsys,1)*24,1);
 lsysMain=lsys;
-%% build mean matrice for 5 & 6 Farvardin
+%% build mean matrix for 5 & 6 Farvardin
 if (mm==1 && dd==5) || (mm==1 && dd==6)
     y1=1;
     y2=1;
@@ -286,7 +286,7 @@ while (FFT+24*k) < length(lsys)
                     T(:,cnt)=[(lsys(FFT+24*k:FFT+24*k+23)-lsys(FFT+24*k-24:FFT+24*k-1))./lsys(FFT+24*k-24:FFT+24*k-1)];
                     calcod(cnt,:)=calH(FFT+k-24,:);
                     cnt=cnt+1;
-                    cnt_tmp=cnt_tmp+1;
+%                     cnt_tmp=cnt_tmp+1;
                 end
             end
             k=k+1;
