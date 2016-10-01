@@ -1,5 +1,5 @@
 % Special Day
-function Final_Forecast=SpecialDay_first(yy,mm,dd,lsys,Ghcal,calH)
+function Final_Forecast=SpecialDay_first(yy,mm,dd,lsys,Ghcal,calH,ModifiedData)
 
 locate=find(Ghcal(:,1)==yy & Ghcal(:,2)==mm & Ghcal(:,3)==dd);
 fromyear=min(calH(:,1));
@@ -36,12 +36,12 @@ for i=1:length(aa)
 end
 
 for i=2:length(aa)-1         % I IS THE TRAINING YEAR
-    P(:,i)=[(lsys((fft(i)-1)*24-23:(fft(i)-1)*24)-lsys((fft(i)-1)*24-47:(fft(i)-1)*24-24))./lsys((fft(i)-1)*24-47:(fft(i)-1)*24-24);...
+    P(:,i)=[(lsys((fft(i)-1)*24+length(ModifiedData)-23:(fft(i)-1)*24+length(ModifiedData))-lsys((fft(i)-1)*24+length(ModifiedData)-47:(fft(i)-1)*24-24+length(ModifiedData)))./lsys((fft(i)-1)*24-47+length(ModifiedData):(fft(i)-1)*24-24+length(ModifiedData));...
         calcod(i)];
-    T(:,i)=(lsys((fft(i)-1)*24+1:(fft(i))*24)-lsys((fft(i)-1)*24-23:(fft(i)-1)*24))./lsys((fft(i)-1)*24-23:(fft(i)-1)*24);
+    T(:,i)=(lsys((fft(i)-1)*24+1+length(ModifiedData):(fft(i))*24)-lsys((fft(i)-1)*24-23+length(ModifiedData):(fft(i)-1)*24))./lsys((fft(i)-1)*24-23+length(ModifiedData):(fft(i)-1)*24);
 end
 i=length(aa);
-X=[(lsys((fft(i)-1)*24-23:(fft(i)-1)*24)-lsys((fft(i)-1)*24-47:(fft(i)-1)*24-24))./lsys((fft(i)-1)*24-47:(fft(i)-1)*24-24);...
+X=[(lsys((fft(i)-1)*24-23+length(ModifiedData):(fft(i)-1)*24+length(ModifiedData))-lsys((fft(i)-1)*24-47+length(ModifiedData):(fft(i)-1)*24-24+length(ModifiedData)))./lsys((fft(i)-1)*24-47+length(ModifiedData):(fft(i)-1)*24-24+length(ModifiedData));...
         calcod(i)];
     %% Addidg Code by Mostafa Gholami
     % ITLMS Code to Densification of Database
@@ -76,4 +76,4 @@ X=[(lsys((fft(i)-1)*24-23:(fft(i)-1)*24)-lsys((fft(i)-1)*24-47:(fft(i)-1)*24-24)
 
     qn=mylf1_test(samples, net, Xn');
     q = postmnmx(qn',mint,maxt);
-    Final_Forecast=lsys((fft(end)-1)*24-23:(fft(end)-1)*24).*(1+q);     
+    Final_Forecast=lsys((fft(end)-1)*24-23+length(ModifiedData):(fft(end)-1)*24).*(1+q);     

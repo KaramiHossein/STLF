@@ -24,8 +24,12 @@ if (lct>=9)
         end
     end
 end
-
-lsys=reshape(lsys(:,6:29)',size(lsys,1)*24,1);
+if sum(lsys(end,6:29)==0)>0 && sum(lsys(end,6:29)~=0)<24
+    ModifiedData=lsys(end,6:5+sum(lsys(end,6:29)==0))';
+else
+    ModifiedData=[];
+end
+lsys=[reshape(lsys(1:end-1,6:29)',size(lsys(1:end-1,:),1)*24,1);ModifiedData];
 lsysMain=lsys;
 %% build mean matrix for 5 & 6 Farvardin
 if (mm==1 && dd==5) || (mm==1 && dd==6)
@@ -86,77 +90,77 @@ else
     ramezan=0;
 end
 %%
-while (FFT+24*k) < length(lsys)
+while (FFT+24*k+23) < length(lsys)
     if ramezan==1
         if isramezan(FFT+k-23-1,1)==1
             monthflag=1;after_hol=0;
             if (calH(FFT+k-23,5)== 1)&& (calH(FFT+k-23-1,5)== 1) && (calH(FFT+k-23-2,5)== 1)
                 % Saturdays Prediction
                 if ((weekday == 1) && (calH(FFT+k-23,4)== 1) && (monthflag==1)) && (after_hol==0)
-                    P1(:,cnt)=[(lsys(FFT+24*k-24:FFT+24*k-1)-lsys(FFT+24*k-48:FFT+24*k-25))./lsys(FFT+24*k-48:FFT+24*k-25);...
+                    P1(:,cnt)=[(lsys(FFT+length(ModifiedData)+24*k-24:FFT+length(ModifiedData)+24*k-1)-lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25))./lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25);...
                         calH(FFT+k-23-1,4)];
                     if(isempty(weatherdata) ==0)
                         P(:,cnt)=[P1(:,cnt);weatherdata(cnt_tmp,6:7)'];
                     else
                         P(:,cnt)=P1(:,cnt);
                     end
-                    T(:,cnt)=[(lsys(FFT+24*k:FFT+24*k+23)-lsys(FFT+24*k-24:FFT+24*k-1))./lsys(FFT+24*k-24:FFT+24*k-1)];
+                    T(:,cnt)=[(lsys(FFT+length(ModifiedData) +24*k:FFT+24*k+23)-lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1))./lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1)];
                     cnt=cnt+1;
                     
                 end
                 
                 % Sundays Prediction
                 if (weekday == 2) && (calH(FFT+k-23,4)== 2) && monthflag==1 && (after_hol==0)
-                    P1(:,cnt)=[(lsys(FFT+24*k-24:FFT+24*k-1)-lsys(FFT+24*k-48:FFT+24*k-25))./lsys(FFT+24*k-48:FFT+24*k-25);...
+                    P1(:,cnt)=[(lsys(FFT+length(ModifiedData)+24*k-24:FFT+length(ModifiedData)+24*k-1)-lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25))./lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25);...
                         calH(FFT+k-23-1,4)];
                     if(isempty(weatherdata) ==0)
                         P(:,cnt)=[P1(:,cnt);weatherdata(cnt_tmp,6:7)'];
                     else
                         P(:,cnt)=P1(:,cnt);
                     end
-                    T(:,cnt)=[(lsys(FFT+24*k:FFT+24*k+23)-lsys(FFT+24*k-24:FFT+24*k-1))./lsys(FFT+24*k-24:FFT+24*k-1)];
+                    T(:,cnt)=[(lsys(FFT+length(ModifiedData) +24*k:FFT+24*k+23)-lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1))./lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1)];
                     cnt=cnt+1;
                     %                 cnt_tmp=cnt_tmp+1;
                 end
                 
                 % Mondays to Wednesdays Prediction
                 if (weekday >= 3) && (weekday <= 5) && (calH(FFT+k-23,4) >= 3) && (calH(FFT+k-23,4) <= 5) && monthflag==1 && (after_hol==0)
-                    P1(:,cnt)=[(lsys(FFT+24*k-24:FFT+24*k-1)-lsys(FFT+24*k-48:FFT+24*k-25))./lsys(FFT+24*k-48:FFT+24*k-25);...
+                    P1(:,cnt)=[(lsys(FFT+length(ModifiedData)+24*k-24:FFT+length(ModifiedData)+24*k-1)-lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25))./lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25);...
                         calH(FFT+k-23-1,4)];
                     if(isempty(weatherdata) ==0)
                         P(:,cnt)=[P1(:,cnt);weatherdata(cnt_tmp,6:7)'];
                     else
                         P(:,cnt)=P1(:,cnt);
                     end
-                    T(:,cnt)=[(lsys(FFT+24*k:FFT+24*k+23)-lsys(FFT+24*k-24:FFT+24*k-1))./lsys(FFT+24*k-24:FFT+24*k-1)];
+                    T(:,cnt)=[(lsys(FFT+length(ModifiedData) +24*k:FFT+24*k+23)-lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1))./lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1)];
                     cnt=cnt+1;
                     %                 cnt_tmp=cnt_tmp+1;
                 end
                 
                 % Thursdays Prediction
                 if (weekday == 6) && (calH(FFT+k-23,4)== 6) && monthflag==1 && (after_hol==0)
-                    P1(:,cnt)=[(lsys(FFT+24*k-24:FFT+24*k-1)-lsys(FFT+24*k-48:FFT+24*k-25))./lsys(FFT+24*k-48:FFT+24*k-25);...
+                    P1(:,cnt)=[(lsys(FFT+length(ModifiedData)+24*k-24:FFT+length(ModifiedData)+24*k-1)-lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25))./lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25);...
                         calH(FFT+k-23-1,4)];
                     if(isempty(weatherdata) ==0)
                         P(:,cnt)=[P1(:,cnt);weatherdata(cnt_tmp,6:7)'];
                     else
                         P(:,cnt)=P1(:,cnt);
                     end
-                    T(:,cnt)=[(lsys(FFT+24*k:FFT+24*k+23)-lsys(FFT+24*k-24:FFT+24*k-1))./lsys(FFT+24*k-24:FFT+24*k-1)];
+                    T(:,cnt)=[(lsys(FFT+length(ModifiedData) +24*k:FFT+24*k+23)-lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1))./lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1)];
                     cnt=cnt+1;
                     %                 cnt_tmp=cnt_tmp+1;
                 end
                 
                 % Fridays Prediction
                 if (weekday == 7) && (calH(FFT+k-23,4)== 7) && monthflag==1 && (after_hol==0)
-                    P1(:,cnt)=[(lsys(FFT+24*k-24:FFT+24*k-1)-lsys(FFT+24*k-48:FFT+24*k-25))./lsys(FFT+24*k-48:FFT+24*k-25);...
+                    P1(:,cnt)=[(lsys(FFT+length(ModifiedData)+24*k-24:FFT+length(ModifiedData)+24*k-1)-lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25))./lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25);...
                         calH(FFT+k-23-1,4)];
                     if(isempty(weatherdata) ==0)
                         P(:,cnt)=[P1(:,cnt);weatherdata(cnt_tmp,6:7)'];
                     else
                         P(:,cnt)=P1(:,cnt);
                     end
-                    T(:,cnt)=[(lsys(FFT+24*k:FFT+24*k+23)-lsys(FFT+24*k-24:FFT+24*k-1))./lsys(FFT+24*k-24:FFT+24*k-1)];
+                    T(:,cnt)=[(lsys(FFT+length(ModifiedData) +24*k:FFT+24*k+23)-lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1))./lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1)];
                     cnt=cnt+1;
                     %                 cnt_tmp=cnt_tmp+1;
                 end
@@ -196,69 +200,69 @@ while (FFT+24*k) < length(lsys)
             end
             % Saturdays Prediction
             if ((weekday == 1) && (calH(FFT+k-23,4)== 1) && (monthflag==1)) && (after_hol==0)
-                P1(:,cnt)=[(lsys(FFT+24*k-24:FFT+24*k-1)-lsys(FFT+24*k-48:FFT+24*k-25))./lsys(FFT+24*k-48:FFT+24*k-25);...
+                P1(:,cnt)=[(lsys(FFT+length(ModifiedData)+24*k-24:FFT+length(ModifiedData)+24*k-1)-lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25))./lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25);...
                     calH(FFT+k-23-1,4)];
                 if(isempty(weatherdata) ==0)
                     P(:,cnt)=[P1(:,cnt);weatherdata(cnt_tmp,6:7)'];
                 else
                     P(:,cnt)=P1(:,cnt);
                 end
-                T(:,cnt)=[(lsys(FFT+24*k:FFT+24*k+23)-lsys(FFT+24*k-24:FFT+24*k-1))./lsys(FFT+24*k-24:FFT+24*k-1)];
+                T(:,cnt)=[(lsys(FFT+length(ModifiedData) +24*k:FFT+24*k+23)-lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1))./lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1)];
                 cnt=cnt+1;
                 
             end
             
             % Sundays Prediction
             if (weekday == 2) && (calH(FFT+k-23,4)== 2) && monthflag==1 && (after_hol==0)
-                P1(:,cnt)=[(lsys(FFT+24*k-24:FFT+24*k-1)-lsys(FFT+24*k-48:FFT+24*k-25))./lsys(FFT+24*k-48:FFT+24*k-25);...
+                P1(:,cnt)=[(lsys(FFT+length(ModifiedData)+24*k-24:FFT+length(ModifiedData)+24*k-1)-lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25))./lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25);...
                     calH(FFT+k-23-1,4)];
                 if(isempty(weatherdata) ==0)
                     P(:,cnt)=[P1(:,cnt);weatherdata(cnt_tmp,6:7)'];
                 else
                     P(:,cnt)=P1(:,cnt);
                 end
-                T(:,cnt)=[(lsys(FFT+24*k:FFT+24*k+23)-lsys(FFT+24*k-24:FFT+24*k-1))./lsys(FFT+24*k-24:FFT+24*k-1)];
+                T(:,cnt)=[(lsys(FFT+length(ModifiedData) +24*k:FFT+24*k+23)-lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1))./lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1)];
                 cnt=cnt+1;
                 %                 cnt_tmp=cnt_tmp+1;
             end
             
             % Mondays to Wednesdays Prediction
             if (weekday >= 3) && (weekday <= 5) && (calH(FFT+k-23,4) >= 3) && (calH(FFT+k-23,4) <= 5) && monthflag==1 && (after_hol==0)
-                P1(:,cnt)=[(lsys(FFT+24*k-24:FFT+24*k-1)-lsys(FFT+24*k-48:FFT+24*k-25))./lsys(FFT+24*k-48:FFT+24*k-25);...
+                P1(:,cnt)=[(lsys(FFT+length(ModifiedData)+24*k-24:FFT+length(ModifiedData)+24*k-1)-lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25))./lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25);...
                     calH(FFT+k-23-1,4)];
                 if(isempty(weatherdata) ==0)
                     P(:,cnt)=[P1(:,cnt);weatherdata(cnt_tmp,6:7)'];
                 else
                     P(:,cnt)=P1(:,cnt);
                 end
-                T(:,cnt)=[(lsys(FFT+24*k:FFT+24*k+23)-lsys(FFT+24*k-24:FFT+24*k-1))./lsys(FFT+24*k-24:FFT+24*k-1)];
+                T(:,cnt)=[(lsys(FFT+length(ModifiedData) +24*k:FFT+24*k+23)-lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1))./lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1)];
                 cnt=cnt+1;
                 %                 cnt_tmp=cnt_tmp+1;
             end
             
             % Thursdays Prediction
             if (weekday == 6) && (calH(FFT+k-23,4)== 6) && monthflag==1 && (after_hol==0)
-                P1(:,cnt)=[(lsys(FFT+24*k-24:FFT+24*k-1)-lsys(FFT+24*k-48:FFT+24*k-25))./lsys(FFT+24*k-48:FFT+24*k-25);...
+                P1(:,cnt)=[(lsys(FFT+length(ModifiedData)+24*k-24:FFT+length(ModifiedData)+24*k-1)-lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25))./lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25);...
                     calH(FFT+k-23-1,4)];
                 if(isempty(weatherdata) ==0)
                     P(:,cnt)=[P1(:,cnt);weatherdata(cnt_tmp,6:7)'];
                 else
                     P(:,cnt)=P1(:,cnt);
                 end
-                T(:,cnt)=[(lsys(FFT+24*k:FFT+24*k+23)-lsys(FFT+24*k-24:FFT+24*k-1))./lsys(FFT+24*k-24:FFT+24*k-1)];
+                T(:,cnt)=[(lsys(FFT+length(ModifiedData) +24*k:FFT+24*k+23)-lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1))./lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1)];
                 cnt=cnt+1;
                 %                 cnt_tmp=cnt_tmp+1;
             end
             % Fridays Prediction
             if (weekday == 7) && (calH(FFT+k-23,4)== 7) && monthflag==1 && (after_hol==0)
-                P1(:,cnt)=[(lsys(FFT+24*k-24:FFT+24*k-1)-lsys(FFT+24*k-48:FFT+24*k-25))./lsys(FFT+24*k-48:FFT+24*k-25);...
+                P1(:,cnt)=[(lsys(FFT+length(ModifiedData)+24*k-24:FFT+length(ModifiedData)+24*k-1)-lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25))./lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25);...
                     calH(FFT+k-23-1,4)];
                 if(isempty(weatherdata) ==0)
                     P(:,cnt)=[P1(:,cnt);weatherdata(cnt_tmp,6:7)'];
                 else
                     P(:,cnt)=P1(:,cnt);
                 end
-                T(:,cnt)=[(lsys(FFT+24*k:FFT+24*k+23)-lsys(FFT+24*k-24:FFT+24*k-1))./lsys(FFT+24*k-24:FFT+24*k-1)];
+                T(:,cnt)=[(lsys(FFT+length(ModifiedData) +24*k:FFT+24*k+23)-lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1))./lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1)];
                 cnt=cnt+1;
                 %                 cnt_tmp=cnt_tmp+1;
             end
@@ -276,14 +280,14 @@ while (FFT+24*k) < length(lsys)
                     end
                 end
                 if after_hol == a_hol
-                    P1(:,cnt)=[(lsys(FFT+24*k-24:FFT+24*k-1)-lsys(FFT+24*k-48:FFT+24*k-25))./lsys(FFT+24*k-48:FFT+24*k-25);...
+                    P1(:,cnt)=[(lsys(FFT+length(ModifiedData)+24*k-24:FFT+length(ModifiedData)+24*k-1)-lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25))./lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25);...
                         calH(FFT+k-23-1,4)];
                     if(isempty(weatherdata) ==0)
                         P(:,cnt)=[P1(:,cnt);weatherdata(cnt_tmp,6:7)'];
                     else
                         P(:,cnt)=P1(:,cnt);
                     end
-                    T(:,cnt)=[(lsys(FFT+24*k:FFT+24*k+23)-lsys(FFT+24*k-24:FFT+24*k-1))./lsys(FFT+24*k-24:FFT+24*k-1)];
+                    T(:,cnt)=[(lsys(FFT+length(ModifiedData) +24*k:FFT+24*k+23)-lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1))./lsys(FFT+length(ModifiedData) +24*k-24:FFT+24*k-1)];
                     calcod(cnt,:)=calH(FFT+k-24,:);
                     cnt=cnt+1;
 %                     cnt_tmp=cnt_tmp+1;
@@ -336,18 +340,18 @@ else
     
     % forecasting 1 farvardin
     if (k==1 || k==2 )
-        Final_Forecast(k,:)=SpecialDay_first(yy,mm,dd,lsysMain,Ghcal,calH);
+        Final_Forecast(k,:)=SpecialDay_first(yy,mm,dd,lsysMain,Ghcal,calH,ModifiedData);
     end
     
     %forecasting 2 ta 4 farvardin
     if  ( (k>= 3) && (k<=4) )
-        Final_Forecast(k,:)=SpecialDay(yy,mm,dd,lsysMain,Ghcal,calH);
+        Final_Forecast(k,:)=SpecialDay(yy,mm,dd,lsysMain,Ghcal,calH,ModifiedData);
     end
     
     
     if (k>=5)
         % build the input for forecasting
-        X=[(lsys(FFT+24*k-48:FFT+24*k-25)-lsys(FFT+24*k-72:FFT+24*k-49))./lsys(FFT+24*k-72:FFT+24*k-49);...
+        X=[(lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25)-lsys(FFT+length(ModifiedData)+24*k-72:FFT+length(ModifiedData)+24*k-49))./lsys(FFT+length(ModifiedData)+24*k-72:FFT+length(ModifiedData)+24*k-49);...
             calD(FFT+k-2,4)];
         if(isempty(weatherdata) ==0)
             X=[X;weatherdata(k,6:7)'];
@@ -358,11 +362,11 @@ else
         qn=mylf1_test(samples, net, Xn');
         
         q = postmnmx(qn',mint,maxt);
-        FF2=[(1+q).*lsys(FFT+24*k-48:FFT+24*k-25)]';
+        FF2=[(1+q).*lsys(FFT+length(ModifiedData) +24*k-48:FFT+24*k-25)]';
         
         % forecasting for special days
         if ( (code>= 2) && (code<=5))
-            Final_Forecast(k,:)=SpecialDay(yy,mm,dd,lsysMain,Ghcal,calH);
+            Final_Forecast(k,:)=SpecialDay(yy,mm,dd,lsysMain,Ghcal,calH,ModifiedData);
         else
             Final_Forecast(k,:)=FF2;
         end
@@ -381,10 +385,10 @@ else
         
         % forecasting for first day of ramadan
         if (code==8)
-            FF_r=SpecialDay(yy,mm,dd,lsysMain,Ghcal,calH);
+            FF_r=SpecialDay(yy,mm,dd,lsysMain,Ghcal,calH,ModifiedData);
             FF2(4:6)=FF_r(4:6);
             Final_Forecast(k,:)=FF2;
         end
     end
-    prediction=Final_Forecast(lct,:);
+    prediction=[ModifiedData' Final_Forecast(lct,:)];
 end
