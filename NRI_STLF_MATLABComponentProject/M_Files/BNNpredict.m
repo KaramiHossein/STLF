@@ -47,6 +47,7 @@ if (mm==1 && dd==5) || (mm==1 && dd==6)
         end
     end
 end
+
 %% Build Database
 %input: ekhtelaf bare diroz va 2roz pish taghsim bar 2roz pish
 %output: ekhtelaf bare emroz va diroz taghsim bar diroz
@@ -198,6 +199,28 @@ while (FFT+24*k+23) < length(lsys)
                     monthflag=1;
                 end
             end
+            
+            % For 6 to 11 Faravardin
+            if calH(lctH,2)==1 && (calH(lctH,3)>5 && calH(lctH,3)<12)
+                if calH(FFT+k-23,2)~=1 || calH(FFT+k-23,3)<6 || calH(FFT+k-23,3)>11
+                    monthflag=0;
+                end
+            end
+            
+            % For 15 to 21 Faravardin
+            if calH(lctH,2)==1 && (calH(lctH,3)>14 && calH(lctH,3)<22)
+                if calH(FFT+k-23,2)~=1 || calH(FFT+k-23,3)<15 || calH(FFT+k-23,3)>21
+                    monthflag=0;
+                end
+            end
+            
+            % For 23 to 27 Esfand
+            if calH(lctH,2)==12 && (calH(lctH,3)>22 && calH(lctH,3)<28)
+                if calH(FFT+k-23,2)~=12 || calH(FFT+k-23,3)<23 || calH(FFT+k-23,3)>27
+                    monthflag=0;
+                end
+            end
+           
             % Saturdays Prediction
             if ((weekday == 1) && (calH(FFT+k-23,4)== 1) && (monthflag==1)) && (after_hol==0)
                 P1(:,cnt)=[(lsys(FFT+length(ModifiedData)+24*k-24:FFT+length(ModifiedData)+24*k-1)-lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25))./lsys(FFT+length(ModifiedData)+24*k-48:FFT+length(ModifiedData)+24*k-25);...
@@ -302,10 +325,11 @@ while (FFT+24*k+23) < length(lsys)
     end
 end
 %% normalizing the load data according to hour
-if (mm==1 && dd==5)
+if (mm==1 && dd==5) || (mm==1 && dd==6)
     mean_farv5=mean(farv5);
     mean_farv6=mean(farv6);
 end
+
 if isempty(P)==1 || isempty(T)==1
     disp('Increase the Year number');
     prediction=[];
@@ -362,10 +386,10 @@ else
         qn=mylf1_test(samples, net, Xn');
         
         q = postmnmx(qn',mint,maxt);
-        FF2=[(1+q).*lsys(FFT+length(ModifiedData) +24*k-48:FFT+24*k-25)]';
+        FF2=[(1+q).*lsys(FFT+length(ModifiedData)+24*k-48:FFT+24*k-25)]';
         
         % forecasting for special days
-        if ( (code>= 2) && (code<=5))
+        if ( (code>= 2) && (code<=5)) || (mm==1 && dd==14) || (mm==12 && dd==28)  || (mm==12 && dd==30) 
             Final_Forecast(k,:)=SpecialDay(yy,mm,dd,lsysMain,Ghcal,calH,ModifiedData);
         else
             Final_Forecast(k,:)=FF2;
@@ -374,14 +398,12 @@ else
         % forecasting for 5 farvardin
         if (mm==1)&&(dd==5)
             Final_Forecast(k,:)=(1+mean_farv5).*FF2;
-            if calD(FFT+k-1,4)~=7
-                FF2=Final_Forecast(k,:);
-            end
         end
         % forecasting for 6 farvardin
         if (mm==1)&&(dd==6)&& calD(FFT+k-1,4)==1
             Final_Forecast(k,:)=(1+mean_farv6).*FF2;
         end
+        
         
         % forecasting for first day of ramadan
         if (code==8)
