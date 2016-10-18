@@ -36,8 +36,7 @@ for z=1:zoneNo
         
         actual=InputData.lsyszone{1,z}(k,6:29);
         if sum(lsys(k,6:29)==0)>0 && sum(lsys(k,6:29)~=0)<24
-            prediction(1,1:sum(lsys(k,6:29)==0))=lsys(k,6:5+sum(lsys(k,6:29)==0));
-            mapes=[];
+            prediction(1,1:(24-sum(lsys(k,6:29)==0)))=lsys(k,6:5+(24-sum(lsys(k,6:29)==0)));            mapes=[];
             errors=[];
         else
             [mapes, errors] = calcError(prediction, actual,mm2);

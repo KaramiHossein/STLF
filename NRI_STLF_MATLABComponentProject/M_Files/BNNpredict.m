@@ -25,7 +25,7 @@ if (lct>=9)
     end
 end
 if sum(lsys(end,6:29)==0)>0 && sum(lsys(end,6:29)~=0)<24
-    ModifiedData=lsys(end,6:5+sum(lsys(end,6:29)==0))';
+    ModifiedData=lsys(end,6:5+(24-sum(lsys(end,6:29)==0)))';
 else
     ModifiedData=[];
 end
