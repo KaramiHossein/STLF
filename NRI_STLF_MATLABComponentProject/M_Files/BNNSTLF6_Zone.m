@@ -32,12 +32,11 @@ for z=1:zoneNo
     mapesZ=[];
     errorsZ=[];
     for k=lct:lct+days-1
-        [prediction]=BNNpredict(lsys(1:k-1,:),yy2,mm2,dd2,weatherdata,calH,calD,Ghcal);
+        [prediction]=BNNpredict(lsys(1:k,:),yy2,mm2,dd2,weatherdata,calH,calD,Ghcal);
         
         actual=InputData.lsyszone{1,z}(k,6:29);
         if sum(lsys(k,6:29)==0)>0 && sum(lsys(k,6:29)~=0)<24
-            prediction(1,1:sum(lsys(k,6:29)==0))=lsys(k,6:5+sum(lsys(k,6:29)==0));
-            mapes=[];
+            prediction(1,1:(24-sum(lsys(k,6:29)==0)))=lsys(k,6:5+(24-sum(lsys(k,6:29)==0)));            mapes=[];
             errors=[];
         else
             [mapes, errors] = calcError(prediction, actual,mm2);

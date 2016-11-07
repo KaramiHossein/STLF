@@ -18,9 +18,9 @@ if ~isempty(TT2)
     A=[A TT2(:,7)];
     D=A(:,30);
     D=D';
-    D1=D(1,:);%D2=D(2,:);%D3=D(3,:);
-    DD1=repmat(D1',1,24);%DD2=repmat(D2',1,24);%DD3=repmat(D3',1,24);
-    DF1=reshape(DD1',1,24*size(DD1,1));%DF2=reshape(DD2',1,24*size(DD2,1));%DF3=reshape(DD3',1,24*size(DD3,1));
+    D1=D(1,:);
+    DD1=repmat(D1',1,24);
+    DF1=reshape(DD1',1,24*size(DD1,1));
     TT=[DF1];
     TempNUM=[0,24,168];
 else
@@ -55,10 +55,10 @@ if SPECIAL==0 && mm==1 && dd==14
         FLAG=0;
     end
     
-elseif SPECIAL==0 && mm==6 && dd==31
-    IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(Adays(1:k-1,:)==0).*(A(:,4)==A(end-6,4)));
+elseif mm==12 && (dd==30 || dd==29 || dd==28)
+    IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(daysramezan(1:k-1,:)==daysramezan(k)).*(Adays(1:k-1,:)==Adays(k)).*(A(:,4)==A(end-6,4)));
     if length(IND3)<5
-        IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(Adays(1:k-1,:)==0));
+        IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(Adays(1:k-1,:)==Adays(k)).*(daysramezan(1:k-1,:)==daysramezan(k)));
     end
     if length(IND3)<5
 %         warndlg('Please Eneter More Data By Choosing Less First Year. The Results Maybe Inaccurate.','Increase Data')
@@ -70,6 +70,28 @@ elseif SPECIAL==0 && mm==6 && dd==31
     INPUTsNUM=[1;2;3;23;24;25];
     if ~isempty(TT2)
         TempNUM=[0,24];
+    end
+    if length(IND3)<5
+        FLAG=1;
+    else
+        FLAG=0;
+    end
+
+elseif SPECIAL==0 && mm==6 && dd==31
+    IND3=find((A(:,2)>mm).*(A(:,2)<mm+3).*(Adays(1:k-1,:)==0).*(daysramezan(1:k-1,1)==daysramezan(k,1)).*(daytypes(1:k-1,1)==daytypes(k,1)));
+%     if length(IND3)<5
+%         IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(Adays(1:k-1,:)==0));
+%     end
+    if length(IND3)<5
+%         warndlg('Please Eneter More Data By Choosing Less First Year. The Results Maybe Inaccurate.','Increase Data')
+    end
+    daysnums=[];
+    for I1=1:length(IND3)
+        daysnums=[daysnums,[((IND3(I1)-1)*24+1):IND3(I1)*24]];
+    end
+    INPUTsNUM=[1;2;3;23;24;25;167;168;169];
+    if ~isempty(TT2)
+        TempNUM=[0,24,168];
     end
     if length(IND3)<5
         FLAG=1;
@@ -119,27 +141,7 @@ elseif (Adays(k,1)==0 || Adays(k,1)>16) && mm==1 && (dd>=15 && dd<=21)
         FLAG=0;
     end
     daysnums=daysnums(find(daysnums>49));
-        
-% elseif (Adays(k,1)==0 || Adays(k,1)>16) && mm==1 && (dd>=6 || dd<=11)
-%     IND3=find((A(:,2)==mm).*max(A(:,3)>=6,A(:,3)<=11).*(daytypes(1:k-1,1)==daytypes(k,1)).*(Adays(1:k-1,1)==Adays(k,1)).*(daysramezan(1:k-1,1)==daysramezan(k,1)));
-%     
-%     if length(IND3)<5
-% %         warndlg('Please Eneter More Data By Choosing Less First Year. The Results Maybe Inaccurate.','Increase Data')
-%     end
-%     daysnums=[];
-%     for I1=1:length(IND3)
-%         daysnums=[daysnums,[((IND3(I1)-1)*24+1):IND3(I1)*24]];
-%     end
-%     INPUTsNUM=[1;2;3;23;24;25;];
-%     if ~isempty(TT2)
-%         TempNUM=[0,24];
-%     end
-%     if length(IND3)<5
-%         FLAG=1;
-%     else
-%         FLAG=0;
-%     end
-%     daysnums=daysnums(find(daysnums>25));
+   
 elseif Adays(k,1)>16 && mm==1 && (dd==4)
     IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(A(:,4)==A(end-6,4)));
     if length(IND3)<5
@@ -207,19 +209,20 @@ elseif SPECIAL==0 && mm==1 && dd==5
     else
         FLAG=0;
     end
-% elseif Adays(k-1,1)==13     % After 21 Ramadan
-%     IND3=find(Adays(1:k-2,:)==Adays(k-1,1));
-%     IND3=IND3+1;
-%     daysnums=[];
-%     for I1=1:length(IND3)
-%         daysnums=[daysnums,[((IND3(I1)-1)*24+1):IND3(I1)*24]];
-%     end
-%     INPUTsNUM=[1;2;3;23;24;25;47;48;49];
-%     if ~isempty(TT2)
-%         TempNUM=[0,24,48];
-%     end
-%     FLAG=1;
+elseif Adays(k-1,1)==13     % After 21 Ramadan
+    IND3=find(Adays(1:k-2,:)==Adays(k-1,1));
+    IND3=IND3+1;
+    daysnums=[];
+    for I1=1:length(IND3)
+        daysnums=[daysnums,[((IND3(I1)-1)*24+1):IND3(I1)*24]];
+    end
+    INPUTsNUM=[1;2;3;23;24;25;167;168;169];
+    if ~isempty(TT2)
+        TempNUM=[0,24,168];
+    end
+    FLAG=1;
     
+  
     
 else
     [Adays,daytypes,daysramezan]=DayType(InputData);
@@ -234,7 +237,7 @@ else
     daysramezanfinal=reshape(daysramezan2',1,24*size(daysramezan2,1));
     
     
-    if SPECIAL==1 || (Adaysfinal(end-167)~=0)||(Adaysfinal(end-168)~=0)||(Adaysfinal(end-169)~=0)
+    if SPECIAL~=1 && ((Adaysfinal(end-167)~=0)||(Adaysfinal(end-168)~=0)||(Adaysfinal(end-169)~=0))
         INPUTsNUM=[1;2;3;23;24;25;47;48;49];
         [Adays,daytypes,daysramezan]=DayType2(InputData);
         Adays=Adays(1:k,:);
@@ -258,18 +261,6 @@ else
         daysnumsaa=find(Adaysfinal==Adays(end));
     end
     daysnums=daysnumsaa(find(daysnumsaa>max(INPUTsNUM)));
-    
-    % II=[];
-    % for I1=1:size(daysnums,2)
-    %     for j=1:length(INPUTsNUM)
-    %         if Adaysfinal(daysnums(1,I1)-INPUTsNUM(j))~=0
-    %             II=[II,I1];
-    %             break
-    %         end
-    %     end
-    % end
-    % daysnums(II)=[];
-    
     
     IND2=[];
     for I1=1:size(daysnums,2)
@@ -314,7 +305,8 @@ end
 
 ss=[ss;tt];
 if FLAG==1 
-    [ss2,y12]=ITLMSfunction(ss,y1);
+    num=(find(InputData.lsyszone{1,1}(ceil(daysnums/24),4)==InputData.lsyszone{1,1}(k,4)))';
+    [ss2,y12]=ITLMSfunction2(ss,y1,num);
     if sum(sum(isnan(ss2)))>0 || sum(sum(isnan(y12)))>0 
         ss=ss;y1=y1;
     else
@@ -330,11 +322,10 @@ if n>max_trainingdata
     y1=y1(:,end-max_trainingdata+1:end);
     ss=ss(:,end-max_trainingdata+1:end);
 end
-% a=randperm(n);
+
 a=1:n;
 u=ss';
 y=y1';
-% n_trn = floor(0.8*n);  % 0.8 to 1
 
 u_trn = u((rem(a,10)<6), :);
 y_trn = y((rem(a,10)<6), :);
@@ -343,20 +334,3 @@ u_tst = u((rem(a,10)>5), :);
 y_tst = y((rem(a,10)>5), :);
 NNeuron = numberofneurons;
 [Indtesta,net,mse_train,mse_test]=lolimot(TempNUM,u_trn,y_trn,NNeuron,smothing_factor, u_tst, y_tst);
-% [output_train{i}]=simloly(net{i},u_trn{i});
-
-% mape_train{i}=mean(abs((output_train{i}-y_trn{i})./y_trn{i}));
-
-% [mintest,indtesta]=min(mse_test{i}); % ?????
-% optnumneurons{i}=indtesta+1;  %??????
-%
-%
-% NNeuron = optnumneurons{i};
-% Err = 0;
-% [net2{i},mse_train2{i}, mse_test2{i}]=lolimot(u_trn{i},y_trn{i},NNeuron,smothing_factor, u_tst{i}, y_tst{i});
-% cd('NeuroFuzzyTrainResults');
-% filename=['TrainResults',num2str(first_year),'_',num2str(N),',',corp_name];
-% save(filename,'net','INPUTsNUM');
-% cd('..');
-% toc
-

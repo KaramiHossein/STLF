@@ -22,7 +22,7 @@ if(flgNeuro>0)
     corp=LoadForecastingNeuroFuzzy_new(yy,mm,dd,days,corp,InputData);
 end
 if(flgLSQ>0)            
-    corp=LoadForecastingLSQ_new(yy,mm,dd,days,corp,InputData);
+    corp=LoadForecastingLSQ_new(yy,mm,dd,days,corp,InputData,N,flgSimilar,flgBNN,flgNeuro);
 end
 
 % find selected day

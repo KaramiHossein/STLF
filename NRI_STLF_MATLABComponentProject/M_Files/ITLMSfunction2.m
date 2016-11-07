@@ -1,7 +1,7 @@
-function [Pn,Tn]=ITLMSfunction(P,T,num)
+function [Pn,Tn]=ITLMSfunction2(P,T,num)
 %% Addidg Code by Mostafa Gholami
 % ITLMS Code to Densification of Database
-if nargin == 3
+if nargin == 3 && isempty(num)==0
     PP=P(:,num);
     TT=T(:,num);
     num0=[];
@@ -76,9 +76,13 @@ XX=[PP;TT];
         end
         XNEW=[XNEW,Xnew];
         XX=Xnew;
-        maxerror=max(error);
+        if size(XNEW,2)>300
+            maxerror=1e-8;
+        else
+            maxerror=max(error);
+        end
     end
-    if nargin==3
+    if nargin==3 && isempty(num)==0
         Pn=[P(:,num0),XNEW(1:size(P,1),:)];
         Tn=[T(:,num0),XNEW(size(P,1)+1:end,:)];
     else
