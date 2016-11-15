@@ -6,9 +6,9 @@ smothing_factor=1/3;
 max_trainingdata=2000;
 
 if ((mm==1)||(mm==7))
-    IND1=[find((A(:,1)<yy).*(A(:,2)==mm));find((A(:,1)<yy).*(A(:,2)==mm+1))];
+    IND1=[find((A(:,1)==yy).*(A(:,2)==mm).*(A(:,3)<dd));find((A(:,1)<yy).*(A(:,2)==mm));find((A(:,1)<yy).*(A(:,2)==mm+1))];
 elseif ((mm==12)||(mm==6))
-    IND1=[find((A(:,1)==yy).*(A(:,2)==mm-1));find((A(:,1)<yy).*(A(:,2)==mm-1));find((A(:,1)<yy).*(A(:,2)==mm))];
+    IND1=[find((A(:,1)==yy).*(A(:,2)==mm).*(A(:,3)<dd));find((A(:,1)==yy).*(A(:,2)==mm-1));find((A(:,1)<yy).*(A(:,2)==mm-1));find((A(:,1)<yy).*(A(:,2)==mm))];
 else
     IND1=[find((A(:,1)==yy).*(A(:,2)==mm).*(A(:,3)<dd));find((A(:,1)==yy).*(A(:,2)==mm-1));find((A(:,1)<yy).*(A(:,2)==mm+1));find((A(:,1)<yy).*(A(:,2)==mm));find((A(:,1)<yy).*(A(:,2)==mm-1))];
 end
