@@ -1,4 +1,4 @@
-function [prediction]=similarpredict(AIn,yy,mm,dd,daytypesIn,spdtypesIn,ramezanIn,L,weatherIn,FittedWeather)
+function [prediction]=similarpredict(AIn,yy,mm,dd,daytypesIn,spdtypesIn,ramezanIn,L,weatherIn,FittedWeather,flagDIn)
 
 % added by m karimi for today data
 A=AIn(1:(end-1),:);
@@ -6,6 +6,8 @@ AToday = AIn(end,6:29);
 if sum(isnan(AToday) | (AToday==0))==0
     AToday =nan(1,24);
 end
+flagD=flagDIn(1:(end-1),:);
+
 DayinWeek = AIn(end,4);
 ramezandays = ramezanIn(1:(end-1));
 ramezan = ramezanIn(end);
@@ -366,7 +368,7 @@ else
 %             indices3=find((daytypes(3:end)'==tomorrowtype) & (daytypes(2:end-1)'==daytypesIn(end-1))& (daytypes(1:end-2)'==daytypesIn(end-2))& (mmm(3:end)== 1 | mmm(3:end)==0) & (ramezandays(3:end)'==ramezan));%Correct by Gholami
             indices3=[];
             if isempty(indices3)==1
-                indices1=find((daytypes'==tomorrowtype) & (mmm== 0 | mmm==1) & (ramezandays'==ramezan));%Correct by Gholami
+                indices1=find((daytypes'==tomorrowtype) & flagD(:,6) & (mmm== 0 | mmm==1) & (ramezandays'==ramezan));%Correct by Gholami
             else
                 indices1=SumN_M(2,indices3);
             end
@@ -374,7 +376,7 @@ else
 %             indices3=find((daytypes(3:end)'==tomorrowtype) & (daytypes(2:end-1)'==daytypesIn(end-1))& (daytypes(1:end-2)'==daytypesIn(end-2))& (mmm(3:end)==0) & (ramezandays(3:end)'==ramezan));%Correct by Gholami
             indices3=[];
             if isempty(indices3)==1
-                indices1=find((daytypes'==tomorrowtype) & (mmm== 0) & (ramezandays'==ramezan));%Correct by Gholami
+                indices1=find((daytypes'==tomorrowtype) & flagD(:,6) & (mmm== 0) & (ramezandays'==ramezan));%Correct by Gholami
             else
                 indices1=SumN_M(2,indices3);
             end
@@ -382,11 +384,11 @@ else
         prediction1 = Method1 (A,indices1,AToday,5,L,weatherIn,FittedWeather);
 
         ddd= MinusM_N(A(:,3),dd);%Add by Gholami
-        indices2=find((daytypes'==tomorrowtype) & (mmm==0) & (abs(ddd)<=7) & (ramezandays'==ramezan));%Correct by Gholami
+        indices2=find((daytypes'==tomorrowtype) & (mmm==0) & flagD(:,6) & (abs(ddd)<=7) & (ramezandays'==ramezan));%Correct by Gholami
         indices3=[];
         if (dd<8 && mm~=7)
             ddd= MinusM_N(A(:,3),30+dd);%Add by Gholami
-            indices3=find((daytypes'==tomorrowtype) & (mmm==1) & (abs(ddd)<=7) & (ramezandays'==ramezan));%Correct by Gholami
+            indices3=find((daytypes'==tomorrowtype) & (mmm==1) & flagD(:,6) & (abs(ddd)<=7) & (ramezandays'==ramezan));%Correct by Gholami
         end
         indices2=union(indices2,indices3);
         if isempty(indices2)==1
@@ -398,7 +400,7 @@ else
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     elseif tomorrowtype==6
         ll=find((daytypes(1:(end-15))~=5));
-        predictiona = MethodS(AIn,yy,mm,dd,daytypesIn,spdtypesIn,ramezanIn,L,ll,weatherIn,FittedWeather);
+        predictiona = MethodS(AIn,yy,mm,dd,daytypesIn,spdtypesIn,ramezanIn,L,ll,weatherIn,FittedWeather,flagDIn);
         %%%
         if A(end,4)==7
             daytomorrow=1;

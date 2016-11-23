@@ -86,13 +86,14 @@ for z = 1:zoneNo
     
     AA = InputData.lsyszone{1,z};
     AA(:,1:5) = InputData.cal.calH;
+    flagD = InputData.flag{1,z};
     predictionZ=[];
     mapesZ=[];
     errorsZ=[];
 
     for k=i:i+days-1
         
-        [prediction]=similarpredict(AA(1:k,:),yy2,mm2,dd2,daytypes(1:k),Adays(1:k),daysramezan(1:k),L,InputData.weatherzone{1,z},corp.zone{1,z}.FittedWeather);
+        [prediction]=similarpredict(AA(1:k,:),yy2,mm2,dd2,daytypes(1:k),Adays(1:k),daysramezan(1:k),L,InputData.weatherzone{1,z},corp.zone{1,z}.FittedWeather,flagD(1:k,:));
 
         actual=InputData.lsyszone{1,z}(k,6:29);
         [mapes, errors] = calcError(prediction, actual,mm2);        

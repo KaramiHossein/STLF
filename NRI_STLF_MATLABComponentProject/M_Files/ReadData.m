@@ -4,6 +4,7 @@ zoneno=length(corp.zone);
 corp_name=corp.name;
 
 Data.lsyszone=cell(1,zoneno);
+Data.flag=cell(1,zoneno);
 Data.weatherzone=cell(1,zoneno);
 for zone=1:zoneno
     weatherno=length(corp.zone{zone}.weathername);
@@ -35,7 +36,20 @@ for i=yy-N:yy
             A=xlsread(name1,corp.zone{zone}.name);
         end
         cd('..');
-        Data.lsyszone{1,zone}=[Data.lsyszone{1,zone}; A(:,1:29)];
+        Data.lsyszone{1,zone}=[Data.lsyszone{1,zone}; A(:,1:29)];        
+        
+ %% days flag (test) mkarimi
+    cd('flag');
+    name5=['flag',num2str(i),'.xls'];
+    if(exist(name5)>0)
+        ff=xlsread(name5);
+    else
+        name5=['flag',num2str(i),'.xlsx'];
+        ff=xlsread(name5);
+    end
+    flagD=ff;
+    cd('..');
+    Data.flag{1,zone}=[Data.flag{1,zone}; flagD]; 
 %% temperature
         weatherno=length(corp.zone{zone}.weathername);
         if(weatherno ~=0)
@@ -118,7 +132,7 @@ for i=yy-N:yy
     end    
     calD=E;
     cd('..');
-    calH=[calH;calD];    
+    calH=[calH;calD];        
 end
 %% for test
 % B1=xlsread('E:\m karimi\STLF\DATA havashenasi\pajoheshgah niro-moslemi1.xlsx','sari');
