@@ -12,6 +12,10 @@ Day=find(ZoneData(:,1)==yy & ZoneData(:,2)==mm & ZoneData(:,3)==dd);
 for j=1:24
     xls_DailyData(1,j)={num2str(DailyData(8,j))};
 end
+for j=1:24
+    xls_SiahBishe(1,j)={num2str(DailyData(119,j))};
+end
+xls_DailyData=xls_DailyData-xls_SiahBishe;
 text1=['F',num2str(Day),':','AC',num2str(Day)];
 xlswrite(name1,xls_DailyData,'Tehran',text1);
 
@@ -125,6 +129,7 @@ summation=zeros(1,24);
 for i=1:16
     summation=summation+DailyData(1+7*i,1:24);
 end
+summation=summation-DailyData(119,1:24);
 for j=1:24
     xls_DailyData_manategh(1,j)={num2str(summation(1,j))};
 end
