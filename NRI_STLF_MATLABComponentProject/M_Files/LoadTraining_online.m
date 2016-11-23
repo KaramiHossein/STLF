@@ -33,7 +33,7 @@ CC=reshape(B',1,24*size(B,1));
 FLAG=0;
 [Adays,daytypes,daysramezan]=DayType(InputData);
 
-if SPECIAL==0 && mm==1 && dd==14
+if SPECIAL==0 && mm==1 && dd==14 && (daysramezan(k)~=0)
     IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(Adays(1:k-1,:)==0).*(A(:,4)==A(end-6,4)));
     if length(IND3)<5
         IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(Adays(1:k-1,:)==0));
@@ -55,7 +55,7 @@ if SPECIAL==0 && mm==1 && dd==14
         FLAG=0;
     end
     
-elseif mm==12 && (dd==30 || dd==29 || dd==28)
+elseif mm==12 && (dd==30 || dd==29 || dd==28)&&(daysramezan(k)~=0)
     IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(daysramezan(1:k-1,:)==daysramezan(k)).*(Adays(1:k-1,:)==Adays(k)).*(A(:,4)==A(end-6,4)));
     if length(IND3)<5
         IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(Adays(1:k-1,:)==Adays(k)).*(daysramezan(1:k-1,:)==daysramezan(k)));
@@ -77,7 +77,7 @@ elseif mm==12 && (dd==30 || dd==29 || dd==28)
         FLAG=0;
     end
 
-elseif SPECIAL==0 && mm==6 && dd==31
+elseif SPECIAL==0 && mm==6 && dd==31 &&(daysramezan(k)~=0)
     IND3=find((A(:,2)>mm).*(A(:,2)<mm+3).*(Adays(1:k-1,:)==0).*(daysramezan(1:k-1,1)==daysramezan(k,1)).*(daytypes(1:k-1,1)==daytypes(k,1)));
 %     if length(IND3)<5
 %         IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(Adays(1:k-1,:)==0));
@@ -98,7 +98,7 @@ elseif SPECIAL==0 && mm==6 && dd==31
     else
         FLAG=0;
     end    
-elseif Adays(k,1)>16 && mm==1 && (dd==3 || dd==2)
+elseif Adays(k,1)>16 && mm==1 && (dd==3 || dd==2) &&(daysramezan(k)~=0)
     IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(A(:,4)==A(end-6,4)));
     if length(IND3)<5
         IND3=find((A(:,2)==mm).*(A(:,3)==dd));
@@ -121,7 +121,7 @@ elseif Adays(k,1)>16 && mm==1 && (dd==3 || dd==2)
     end
     daysnums=daysnums(find(daysnums>49));
         
-elseif (Adays(k,1)==0 || Adays(k,1)>16) && mm==1 && (dd>=15 && dd<=21)
+elseif (Adays(k,1)==0 || Adays(k,1)>16) && mm==1 && (dd>=15 && dd<=21)&&(daysramezan(k)~=0)
     IND3=find((A(:,2)==mm).*max(A(:,3)>=15,A(:,3)<=21).*(daytypes(1:k-1,1)==daytypes(k,1)).*(Adays(1:k-1,1)==Adays(k,1)).*(daysramezan(1:k-1,1)==daysramezan(k,1)));
     
     if length(IND3)<5
@@ -142,7 +142,7 @@ elseif (Adays(k,1)==0 || Adays(k,1)>16) && mm==1 && (dd>=15 && dd<=21)
     end
     daysnums=daysnums(find(daysnums>49));
    
-elseif Adays(k,1)>16 && mm==1 && (dd==4)
+elseif Adays(k,1)>16 && mm==1 && (dd==4)&&(daysramezan(k)~=0)
     IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(A(:,4)==A(end-6,4)));
     if length(IND3)<5
         IND3=find((A(:,2)==mm).*(A(:,3)==dd));
@@ -165,7 +165,7 @@ elseif Adays(k,1)>16 && mm==1 && (dd==4)
     end
     daysnums=daysnums(find(daysnums>49));
 
-elseif Adays(k,1)>16 && mm==1 && dd==1
+elseif Adays(k,1)>16 && mm==1 && dd==1 &&(daysramezan(k)~=0)
     IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(A(:,4)==A(end-6,4)));
     if length(IND3)<5
         IND3=find((A(:,2)==mm).*(A(:,3)==dd));
@@ -188,7 +188,7 @@ elseif Adays(k,1)>16 && mm==1 && dd==1
     end
     daysnums=daysnums(find(daysnums>25));
 
-elseif SPECIAL==0 && mm==1 && dd==5
+elseif SPECIAL==0 && mm==1 && dd==5 &&(daysramezan(k)~=0)
     IND3=find((A(:,1)>min(A(:,1))).*(A(:,2)==mm).*(A(:,3)==dd).*(Adays(1:k-1,:)==0).*(A(:,4)==A(end-6,4)));
     if length(IND3)<5
         IND3=find((A(:,2)==mm).*(A(:,3)==dd).*(Adays(1:k-1,:)==0));
