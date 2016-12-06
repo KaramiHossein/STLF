@@ -1,126 +1,114 @@
 % ImportData
 function ImportExcelFile(AppPath,address,yy,mm,dd)
 DailyData=xlsread(address,'„‰«ÿﬁ');
+InterchangeData=xlsread(address,'«—”«·Ì »—Ê‰ „—“Ì');
+InterchangeData=sum(InterchangeData(:,1:24));
+IndustrialData=xlsread(address,'’‰«Ì⁄');
 
 loadDataPath=[AppPath,'\LoadData'];
 cd(loadDataPath);
-name1=['L_TotalManategh',num2str(yy),'.xls'];
+name1=['L_TotalManategh',num2str(yy),'.xlsx'];
 
 ZoneData=xlsread(name1,'Tehran');
 Day=find(ZoneData(:,1)==yy & ZoneData(:,2)==mm & ZoneData(:,3)==dd);
 %% Tehran
-for j=1:24
-    xls_DailyData(1,j)={num2str(DailyData(8,j))};
-end
-for j=1:24
-    xls_SiahBishe(1,j)={num2str(DailyData(119,j))};
-end
-xls_DailyData=xls_DailyData-xls_SiahBishe;
+    xls_DailyData(1,1:24)=(DailyData(8,1:24));
+    xls_SiahBishe(1,1:24)=(DailyData(119,1:24));
+
+xls_DailyData=(xls_DailyData)-(xls_SiahBishe);
 text1=['F',num2str(Day),':','AC',num2str(Day)];
-xlswrite(name1,xls_DailyData,'Tehran',text1);
+
+
+%% SiahBishe
+xlswrite(['L_SiahBishe',num2str(yy),'.xlsx'],xls_SiahBishe,text1);
 
 %% Mazandaran
-for j=1:24
-    xls_DailyData(1,j)={num2str(DailyData(15,j))};
-end
+    xls_DailyData(1,1:24)=(DailyData(15,1:24));
+
 text1=['F',num2str(Day),':','AC',num2str(Day)];
 xlswrite(name1,xls_DailyData,'Mazandaran',text1);
 
 %% Gilan
-for j=1:24
-    xls_DailyData(1,j)={num2str(DailyData(22,j))};
-end
+    xls_DailyData(1,1:24)=(DailyData(22,1:24));
+
 text1=['F',num2str(Day),':','AC',num2str(Day)];
 xlswrite(name1,xls_DailyData,'Gilan',text1);
 
 %% Semnan
-for j=1:24
-    xls_DailyData(1,j)={num2str(DailyData(29,j))};
-end
+    xls_DailyData(1,1:24)=(DailyData(29,1:24));
+
 text1=['F',num2str(Day),':','AC',num2str(Day)];
 xlswrite(name1,xls_DailyData,'Semnan',text1);
 
 %% Zanjan
-for j=1:24
-    xls_DailyData(1,j)={num2str(DailyData(36,j))};
-end
+    xls_DailyData(1,1:24)=(DailyData(36,1:24));
+
 text1=['F',num2str(Day),':','AC',num2str(Day)];
 xlswrite(name1,xls_DailyData,'Zanjan',text1);
 
 %% Azarbayejan
-for j=1:24
-    xls_DailyData(1,j)={num2str(DailyData(43,j))};
-end
+    xls_DailyData(1,1:24)=(DailyData(43,1:24));
+
 text1=['F',num2str(Day),':','AC',num2str(Day)];
 xlswrite(name1,xls_DailyData,'Azarbayejan',text1);
 
 %% Bakhtar
-for j=1:24
-    xls_DailyData(1,j)={num2str(DailyData(50,j))};
-end
+    xls_DailyData(1,1:24)=(DailyData(50,1:24));
+
 text1=['F',num2str(Day),':','AC',num2str(Day)];
 xlswrite(name1,xls_DailyData,'Bakhtar',text1);
 
 %% Gharb
-for j=1:24
-    xls_DailyData(1,j)={num2str(DailyData(57,j))};
-end
+    xls_DailyData(1,1:24)=(DailyData(57,1:24));
+
 text1=['F',num2str(Day),':','AC',num2str(Day)];
 xlswrite(name1,xls_DailyData,'Gharb',text1);
 
 %% Esfehan
-for j=1:24
-    xls_DailyData(1,j)={num2str(DailyData(64,j))};
-end
+    xls_DailyData(1,1:24)=(DailyData(64,1:24));
+
 text1=['F',num2str(Day),':','AC',num2str(Day)];
 xlswrite(name1,xls_DailyData,'Esfehan',text1);
 
 %% Khozestan
-for j=1:24
-    xls_DailyData(1,j)={num2str(DailyData(71,j))};
-end
+    xls_DailyData(1,1:24)=(DailyData(71,1:24));
+
 text1=['F',num2str(Day),':','AC',num2str(Day)];
 xlswrite(name1,xls_DailyData,'Khozestan',text1);
 
 %% Fars
-for j=1:24
-    xls_DailyData(1,j)={num2str(DailyData(78,j))};
-end
+    xls_DailyData(1,1:24)=(DailyData(78,1:24));
+
 text1=['F',num2str(Day),':','AC',num2str(Day)];
 xlswrite(name1,xls_DailyData,'Fars',text1);
 
 %% Yazd
-for j=1:24
-    xls_DailyData(1,j)={num2str(DailyData(85,j))};
-end
+    xls_DailyData(1,1:24)=(DailyData(85,1:24));
+
 text1=['F',num2str(Day),':','AC',num2str(Day)];
 xlswrite(name1,xls_DailyData,'Yazd',text1);
 
 %% Kerman
-for j=1:24
-    xls_DailyData(1,j)={num2str(DailyData(92,j))};
-end
+    xls_DailyData(1,1:24)=(DailyData(92,1:24));
+
 text1=['F',num2str(Day),':','AC',num2str(Day)];
 xlswrite(name1,xls_DailyData,'Kerman',text1);
 
 %% Hormozgan
-for j=1:24
-    xls_DailyData(1,j)={num2str(DailyData(99,j))};
-end
+    xls_DailyData(1,1:24)=(DailyData(99,1:24));
+
 text1=['F',num2str(Day),':','AC',num2str(Day)];
 xlswrite(name1,xls_DailyData,'Hormozgan',text1);
 
 %% Khorasan
-for j=1:24
-    xls_DailyData(1,j)={num2str(DailyData(106,j))};
-end
+    xls_DailyData(1,1:24)=(DailyData(106,1:24));
+
 text1=['F',num2str(Day),':','AC',num2str(Day)];
 xlswrite(name1,xls_DailyData,'Khorasan',text1);
 
 %% Sistan
-for j=1:24
-    xls_DailyData(1,j)={num2str(DailyData(113,j))};
-end
+    xls_DailyData(1,1:24)=(DailyData(113,1:24));
+
 text1=['F',num2str(Day),':','AC',num2str(Day)];
 xlswrite(name1,xls_DailyData,'Sistan',text1);
 
@@ -130,10 +118,37 @@ for i=1:16
     summation=summation+DailyData(1+7*i,1:24);
 end
 summation=summation-DailyData(119,1:24);
-for j=1:24
-    xls_DailyData_manategh(1,j)={num2str(summation(1,j))};
-end
-name1=['L_Manategh',num2str(yy),'.xls'];
+    xls_DailyData_manategh(1,1:24)=(summation(1,1:24));
+
+name1=['L_Manategh',num2str(yy),'.xlsx'];
 text1=['F',num2str(Day),':','AC',num2str(Day)];
 xlswrite(name1,xls_DailyData_manategh,'sheet1',text1);
+
+%% Interchange
+name1=['L_Interchange',num2str(yy),'.xlsx'];
+    xls_DailyData_Interchange(1,1:24)=InterchangeData(1,1:24);
+
+text1=['F',num2str(Day),':','AC',num2str(Day)];
+xlswrite(name1,xls_DailyData_Interchange,text1);
+
+%% Industrial
+name1=['L_Industrial',num2str(yy),'.xlsx'];
+summation=zeros(1,24);
+i=1;
+while 5*i<size(IndustrialData,1)
+    summation=summation+IndustrialData(5*i+1,1:24);
+    i=i+1;
+end
+    xls_DailyData_Industrial(1,1:24)=(summation(1,1:24));
+
+text1=['F',num2str(Day),':','AC',num2str(Day)];
+xlswrite(name1,xls_DailyData_Industrial,text1);
+
+%% system
+xls_DailyData_system=xls_DailyData_manategh+xls_DailyData_Industrial+xls_DailyData_Interchange+xls_SiahBishe;
+name1=['L_system',num2str(yy),'.xlsx'];
+text1=['F',num2str(Day),':','AC',num2str(Day)];
+xlswrite(name1,xls_DailyData_system,text1);
+
+
 cd('..');
