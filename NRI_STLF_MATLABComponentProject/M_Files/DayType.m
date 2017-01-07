@@ -1,7 +1,7 @@
 function [Adays,daytypes,daysramezan]=DayType(InputData);
 
 % Determining Special Shamsi Days(spshd)
-shcal=[1 1; 1 2; 1 3; 1 4 ; 1 12; 1 13; 3 14; 3 15; 11 22; 12 29;6 30];
+shcal=[1 1; 1 2; 1 3; 1 4 ; 1 12; 1 13; 3 14; 3 15; 11 22; 12 29;6 31];
 ghcal = InputData.cal.Ghcal;
 
 % % are lsyszone for all zones equal size??
