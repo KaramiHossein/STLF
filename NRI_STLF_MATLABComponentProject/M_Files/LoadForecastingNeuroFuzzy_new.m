@@ -1,6 +1,5 @@
 
 function [corp]=LoadForecastingNeuroFuzzy_new(yy,mm,dd,days,corp,InputData)
-global Indtesta
 
 [Adays,daytypes,daysramezan]=DayType(InputData);
 
@@ -30,10 +29,10 @@ for I=1:length(corp.zone)
         end
         
         if isempty(TT)
-            BB=[];
+            KomakTemp=[];
             TAToday=[];
         else
-            BB=TT(1:k-1,:);
+            KomakTemp=TT(1:k-1,:);
             TAToday=TT(k,:);
         end
         if sum(A2(k,6:29)>0)>0 && sum(A2(k,6:29)>0)<24
@@ -43,15 +42,15 @@ for I=1:length(corp.zone)
         end
         
         
-        [Indtesta,net,INPUTsNUM,TempNUM]=LoadTraining_online(SPECIAL,A2(k,1),A2(k,2),A2(k,3),A2(1:k-1,:),BB,InputData,k,A2(k,6:29),TAToday);
+        [net,INPUTsNUM,TempNUM]=LoadTraining_online(InputData.flag{1,I}(1:k-1,:),SPECIAL,A2(k,1),A2(k,2),A2(k,3),A2(1:k-1,:),KomakTemp,InputData,k,A2(k,6:29),TAToday);
         
         % etelaate bare roze morde nazar ra dar AToday migozarad , agar data
         % mojod nabod bejash NAN migozarad
         
         if ~isempty(TT)
-            BB=TT(1:k,:);
+            KomakTemp=TT(1:k,:);
         end
-        [prediction]=NeuroFuzzypredict_Final(net,TempNUM,INPUTsNUM,A2(1:k-1,:),BB,A2(k,6:29));
+        [prediction]=NeuroFuzzypredict_Final(net,TempNUM,INPUTsNUM,A2(1:k-1,:),KomakTemp,A2(k,6:29));
         
         if sum(isnan(A(k,6:29)))==0
             mape=100*mean(abs(prediction-A(k,6:29))./A(k,6:29)); % motavaset khataye nesbi pishbini ra neshan midahad
@@ -109,8 +108,31 @@ for k=1:days
         prediction = [prediction;corp.zone{1,z}.NeuroPredict(k,:)];
         actual=[ actual; InputData.lsyszone{1,z}(i+k-1,6:29)];
     end
-    predictionC =[predictionC; sum(prediction,1)];
-    actualC = [actualC; sum(actual,1)];
+    TotActual=sum(actual,1);
+    TotPrediction=sum(prediction,1);
+    if ~strcmp(corp.name,'system')
+        SiahBishe=InputData.SiahBishe;
+        Industrial=InputData.Industrial;
+        Interchange=InputData.Interchange;
+        if k>1
+            SiahBishe(i+k-2,6:29)=MeanSiahBishe;
+            Industrial(i+k-2,6:29)=MeanIndustrial;
+            Interchange(i+k-2,6:29)=MeanInterchange;
+        end
+        if max(sum(InputData.lsyszone{1,1}(i+k-1,6:29)==0),sum(isnan(InputData.lsyszone{1,1}(i+k-1,6:29))))>0
+            hhh=24-max(sum(InputData.lsyszone{1,1}(i+k-1,6:29)==0),sum(isnan(InputData.lsyszone{1,1}(i+k-1,6:29))));
+        else
+            hhh=0;
+        end
+        MeanSiahBishe=[SiahBishe(i+k-1,6:6+hhh-1) mean(SiahBishe(i-3+k-1:i-1+k-1,6+hhh:29))];
+        MeanIndustrial=[Industrial(i+k-1,6:6+hhh-1) mean(Industrial(i-7+k-1:i-1+k-1,6+hhh:29))];
+        MeanInterchange=[Interchange(i+k-1,6:6+hhh-1) mean(Interchange(i-7+k-1:i-1+k-1,6+hhh:29))];
+        TotPrediction=sum(prediction,1)+MeanInterchange+MeanIndustrial+MeanSiahBishe;
+        TotActual=sum(actual,1)+InputData.Industrial(i+k-1,6:29)+InputData.Interchange(i+k-1,6:29)+InputData.SiahBishe(i+k-1,6:29);
+    end
+    
+    predictionC =[predictionC; TotPrediction];
+    actualC = [actualC; TotActual];
 end
 mapesC=[];
 errorsC=[];
