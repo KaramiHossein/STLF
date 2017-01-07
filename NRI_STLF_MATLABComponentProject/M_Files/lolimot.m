@@ -24,7 +24,7 @@
 %
 % Use simloly.m to calculate the net output
 
-function [Indtesta,net,mse,mse_test]=lolimot(TempNUM,input,output,max_neuron,alpha, ....
+function [net,mse,mse_test]=lolimot(TempNUM,input,output,max_neuron,alpha, ....
     test_input,test_output,reg_coef,mse_goal)
 
 if nargin > 8  error('too many input arguments');    end;
@@ -39,8 +39,8 @@ if nargin == 6 ; error('test output is needed'); end;
 if nargin >= 7 ; test_flag=1; end;
 
 output=output(:);                  
-[in_row in_col]=size(input);
-[out_row out_col]=size(output);
+[in_row,in_col]=size(input);
+[out_row,out_col]=size(output);
 
 %----------data normalization-------------------------------
 SizeTemp=length(TempNUM);
@@ -100,11 +100,19 @@ flag=1;
 input_reserve=input;
 output_reserve=output;
 
-net(1).cord=ones(in_col,2);
-net(1).cord(:,1)=-1;
+net(1).cord=[max(input)'.*ones(in_col,1),max(input)'.*ones(in_col,1);];
+net(1).cord(:,1)=min(input)'.*ones(in_col,1);
+net(1).cord(end,1)=-1;
+if ~isempty(find(net(1).cord(:,1)==net(1).cord(:,2)))
+    if net(1).cord(find(net(1).cord(:,1)==net(1).cord(:,2)),1)==1
+        net(1).cord(find(net(1).cord(:,1)==net(1).cord(:,2)),1)=-1;
+    else
+        net(1).cord(find(net(1).cord(:,1)==net(1).cord(:,2)),2)=1;
+    end
+end
 
 
-[net(1).center net(1).sigma]=SiCe(net(1).cord,alpha);
+[net(1).center,net(1).sigma]=SiCe(net(1).cord,alpha);
 mem(:,1)=phi(input_reserve,net(1).sigma,net(1).center);
 
 index_col=1;
@@ -114,7 +122,7 @@ mem2(:,index_col)=phi(test_input,net(index_col).sigma,net(index_col).center);
 % waitbar_1 = waitbar(0,'Please wait... LoLiMoT is being trained.');
 for m=2:max_neuron
 %     clc
-    Neuron=m;
+%     Neuron=m;
 %     waitbar((m-1)/(max_neuron-1),waitbar_1)
     cord=net(index_col).cord;
 %     dummy(1).cord=cord;
@@ -126,7 +134,7 @@ for m=2:max_neuron
         dummy(1).cord(j,:)=[cord(j,1) 0.5*(cord(j,2)-cord(j,1))+cord(j,1)];
         dummy(2).cord(j,:)=[0.5*(cord(j,2)-cord(j,1))+cord(j,1) cord(j,2)];
         for k=1:2
-            [dummy(k).center dummy(k).sigma]=SiCe(dummy(k).cord,alpha);
+            [dummy(k).center,dummy(k).sigma]=SiCe(dummy(k).cord,alpha);
         end;
         net(index_col).sigma=dummy(1).sigma;
         net(index_col).center=dummy(1).center;
@@ -152,15 +160,15 @@ for m=2:max_neuron
         end;
         mse_halves(j)=mean((out_halves-output_reserve).^2);
     end;
-    [kochik index]=min(mse_halves);
+    [kochik,index]=min(mse_halves);
     dummy(1).cord=cord;
     dummy(2).cord=cord;
     dummy(1).cord(index,:)=[cord(index,1) 0.5*(cord(index,2)-cord(index,1))+cord(index,1)];
     dummy(2).cord(index,:)=[0.5*(cord(index,2)-cord(index,1))+cord(index,1) cord(index,2)];
     net(index_col).cord=dummy(1).cord;
-    [net(index_col).center net(index_col).sigma]=SiCe(net(index_col).cord,alpha);
+    [net(index_col).center,net(index_col).sigma]=SiCe(net(index_col).cord,alpha);
     net(len_net+1).cord=dummy(2).cord;
-    [net(len_net+1).center net(len_net+1).sigma]=SiCe(net(len_net+1).cord,alpha);
+    [net(len_net+1).center,net(len_net+1).sigma]=SiCe(net(len_net+1).cord,alpha);
 
     %------------Finding the worst Neuron----------------------------
     mem=mem1;mem(:,index_col)=phi(input_reserve,net(index_col).sigma,net(index_col).center);
@@ -192,7 +200,7 @@ for m=2:max_neuron
         for i=1:len
             mem4(:,i)=mem2(:,i)./sum_mem;
         end;
-        [in_row_test test_col]=size(test_input);
+        [in_row_test,test_col]=size(test_input);
         out=zeros(in_row_test,1);
         [net(index_col).test_output]=Lomse_test(test_input,net(index_col).weight,mem4(:,index_col));
         [net(len_net+1).test_output]=Lomse_test(test_input,net(len_net+1).weight,mem4(:,len_net+1));
@@ -203,7 +211,7 @@ for m=2:max_neuron
     else
         mse_test='Not calculated';
     end;
-        [oo index_col]=max(mse_local);
+        [oo,index_col]=max(mse_local);
 NET{m-1}=net;
 end
 [Mintest,Indtesta]=min(mse_test);
@@ -212,8 +220,8 @@ net=NET{Indtesta};
 % close(waitbar_1);
 
 %----------Membership Calculation-----------------------
-function  [membership]=phi(input,sigma,center);
-[row col]=size(input);
+function  [membership]=phi(input,sigma,center)
+[row,col]=size(input);
 for j=1:row
     product=1;
     for i=1:col
@@ -223,16 +231,16 @@ for j=1:row
 end;
 
 %---------Center and Sigma Calculation-------------------
-function [center,sigma]=SiCe(cord,alpha);
-[row col]=size(cord);
+function [center,sigma]=SiCe(cord,alpha)
+[row,col]=size(cord);
 for i=1:row
     center(i)=(cord(i,1)+cord(i,2))/2;
     sigma(i)=abs((cord(i,2)-cord(i,1)))*alpha;
 end;
 
 %--------Local MSE Calculation----------------------------
-function [mse_local,weights,output]=Lomse(input,output,membership,reg_coef);
-[row col]=size(membership);
+function [mse_local,weights,output]=Lomse(input,output,membership,reg_coef)
+[row,col]=size(membership);
 Q=diag(membership(:,1));
 weights(:,1)=pinv(input'*Q*input+reg_coef*eye(col))*input'*Q*output;
 out=input*weights(:,1);
@@ -241,6 +249,6 @@ output=out.*membership;
 mse_local=error'*Q*error;
 
 %--------TEST output--------------------------------------
-function [output]=Lomse_test(input,weights,membership);
+function [output]=Lomse_test(input,weights,membership)
 out=input*weights;
 output=out.*membership;
