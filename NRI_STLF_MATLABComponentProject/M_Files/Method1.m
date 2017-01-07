@@ -104,21 +104,21 @@ if(flag)
     EukDis=zeros(size(indices));
     if(~isempty(weatherCompareT))
         nwt = size(indices,1);
-        wt = ones(nwt,1)*(1./(nwt*mean(weatherCompareT(indices,:)).*mean(weatherCompareT(indices,:))));
+        wt = ones(nwt,1)*(1./(nwt*mean(weatherCompareT(indices,:).*weatherCompareT(indices,:))));
         EukDis = EukDis + sum(weatherCompareT(indices,:).*weatherCompareT(indices,:) .* wt,2);%% 
     end
     if(~isempty(weatherCompareH))
         nwh = size(indices,1);
-        wh = ones(nwh,1)*(1./(nwh*mean(weatherCompareH(indices,:)).*mean(weatherCompareH(indices,:))));
+        wh = ones(nwh,1)*(1./(nwh*mean(weatherCompareH(indices,:).*weatherCompareH(indices,:))));
         EukDis = EukDis+ sum( weatherCompareH(indices,:).*weatherCompareH(indices,:) .* wh,2);%% 
     end 
     if(~isempty(weatherCompareN))
         nwn = size(indices,1);
-        wn = ones(nwn,1)*(1./(nwn*mean(weatherCompareN(indices,:)).*mean(weatherCompareN(indices,:))));
+        wn = ones(nwn,1)*(1./(nwn*mean(weatherCompareN(indices,:).*weatherCompareN(indices,:))));
         EukDis = EukDis+ sum( weatherCompareN(indices,:).*weatherCompareN(indices,:) .* wn,2);%% 
     end
     
-    EukDis = EukDis +((MinusM_N(indices,max(indices)+1).^2)./(mean(MinusM_N(indices,max(indices)+1)).^2)./size(indices,1));%% add day value to eukDis and weghting factor (2000) is selected with trial and error
+    EukDis = EukDis +((MinusM_N(indices,max(indices)+1).^2)./(mean(MinusM_N(indices,max(indices)+1).^2))./size(indices,1));%% add day value to eukDis and weghting factor (2000) is selected with trial and error
     
     [EukDis2, ind]= sort(EukDis,'descend');
     if(~isempty(ind))
