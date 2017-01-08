@@ -4,7 +4,11 @@ zoneno=length(corp.zone);
 corp_name=corp.name;
 
 Data.lsyszone=cell(1,zoneno);
+Data.flag=cell(1,zoneno);
 Data.weatherzone=cell(1,zoneno);
+Data.Interchange=[];
+Data.Industrial=[];
+Data.SiahBishe=[];
 for zone=1:zoneno
     weatherno=length(corp.zone{zone}.weathername);
     Data.weatherzone{1,zone}.temp=cell(weatherno,1);
@@ -21,7 +25,7 @@ calH=[];calD=[];
 
 for i=yy-N:yy
     for zone=1:zoneno
-        A=[]; 
+        A=[];
         C=[];
         D=[];
         cd(loadDataPath);
@@ -36,7 +40,20 @@ for i=yy-N:yy
         end
         cd('..');
         Data.lsyszone{1,zone}=[Data.lsyszone{1,zone}; A(:,1:29)];
-%% temperature
+        
+        %% days flag (test) mkarimi
+        cd('flag');
+        name5=['flag',num2str(i),'.xls'];
+        if(exist(name5)>0)
+            ff=xlsread(name5);
+        else
+            name5=['flag',num2str(i),'.xlsx'];
+            ff=xlsread(name5);
+        end
+        flagD=ff;
+        cd('..');
+        Data.flag{1,zone}=[Data.flag{1,zone}; flagD];
+        %% temperature
         weatherno=length(corp.zone{zone}.weathername);
         if(weatherno ~=0)
             cd(weatherDataPath);
@@ -55,8 +72,8 @@ for i=yy-N:yy
                 Data.weatherzone{1,zone}.temp{j,1}=[Data.weatherzone{1,zone}.temp{j,1};B(:,1:8)];
             end
             cd('..');
-        end        
-%% humidity %%%% need to change!!!!!!!!!!
+        end
+        %% humidity %%%% need to change!!!!!!!!!!
         humidityno=length(corp.zone{zone}.humidityname);
         if(humidityno ~=0)
             cd(weatherDataPath);
@@ -75,9 +92,9 @@ for i=yy-N:yy
                 Data.weatherzone{1,zone}.humidity{j,1}=[Data.weatherzone{1,zone}.humidity{j,1};B(:,1:5)  B(:,13)];%% must change
             end
             cd('..');
-        end     
+        end
         
-%% nebulosity %%%% need to change!!!!!!!!!!
+        %% nebulosity %%%% need to change!!!!!!!!!!
         nebulosityno=length(corp.zone{zone}.nebulosityname);
         if(nebulosityno ~=0)
             cd(weatherDataPath);
@@ -96,11 +113,43 @@ for i=yy-N:yy
                 Data.weatherzone{1,zone}.nebulosity{j,1}=[Data.weatherzone{1,zone}.nebulosity{j,1};B(:,1:5) B(:,25)];%% must change
             end
             cd('..');
-        end     
-
+        end
+        
     end
-    % Calendar Set Up 
-
+    % Industrial & Interchange & SiahBishe
+    
+    cd(loadDataPath);
+    name6=['L_Industrial',num2str(i),'.xls'];
+        if(exist(name6)>0)
+            Ind=xlsread(name6);
+        else
+            name6=['L_Industrial',num2str(i),'.xlsx'];
+            Ind=xlsread(name6);
+        end
+        Data.Industrial=[Data.Industrial;Ind];
+        
+        name7=['L_Interchange',num2str(i),'.xls'];
+        if(exist(name7)>0)
+            Inter=xlsread(name7);
+        else
+            name7=['L_Interchange',num2str(i),'.xlsx'];
+            Inter=xlsread(name7);
+        end
+        Data.Interchange=[Data.Interchange;Inter];
+        
+        name8=['L_SiahBishe',num2str(i),'.xls'];
+        if(exist(name8)>0)
+            SiahBishe=xlsread(name8);
+        else
+            name8=['L_SiahBishe',num2str(i),'.xlsx'];
+            SiahBishe=xlsread(name8);
+        end
+        Data.SiahBishe=[Data.SiahBishe;SiahBishe];
+        
+    cd('..');
+    
+    % Calendar Set Up
+    
     cd(calendarDataPath);
     name5=['caln',num2str(i),'.xls'];
     if(exist(name5)>0)
@@ -115,10 +164,10 @@ for i=yy-N:yy
     else
         name6=['ghcal.xlsx'];
         Egh=xlsread(name6);
-    end    
+    end
     calD=E;
     cd('..');
-    calH=[calH;calD];    
+    calH=[calH;calD];
 end
 %% for test
 % B1=xlsread('E:\m karimi\STLF\DATA havashenasi\pajoheshgah niro-moslemi1.xlsx','sari');
@@ -130,7 +179,7 @@ end
 % Data.weatherzone{1,1}.nebulosity{1,1}(:,6)=B1(:,11);
 % Data.weatherzone{1,2}.nebulosity{1,1}(:,6)=B2(:,11);
 % Data.weatherzone{1,3}.nebulosity{1,1}(:,6)=B3(:,11);
-% 
+%
 % load WD1;
 % B2=reshape(B1,24,365*2)';
 % Data.weatherzone{1,1}.temp{1,1}(:,9:32)=B2;

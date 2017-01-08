@@ -35,7 +35,12 @@ for k=1:days
     for z = 1:zoneNo       
         actual=[ actual; InputData.lsyszone{1,z}(i+k-1,6:29)];
     end
-    actualC = [actualC; sum(actual,1)];
+    if ~strcmp(corp.name,'system')
+        TotActual=sum(actual,1)+InputData.SiahBishe(i+k-1,6:29)+InputData.Industrial(i+k-1,6:29)+InputData.Interchange(i+k-1,6:29);
+    else
+        TotActual=sum(actual,1);
+    end
+    actualC = [actualC; TotActual];
 end
 
 

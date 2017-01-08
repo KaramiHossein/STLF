@@ -86,13 +86,14 @@ for z = 1:zoneNo
     
     AA = InputData.lsyszone{1,z};
     AA(:,1:5) = InputData.cal.calH;
+    flagD = InputData.flag{1,z};
     predictionZ=[];
     mapesZ=[];
     errorsZ=[];
 
     for k=i:i+days-1
         
-        [prediction]=similarpredict(AA(1:k,:),yy2,mm2,dd2,daytypes(1:k),Adays(1:k),daysramezan(1:k),L,InputData.weatherzone{1,z},corp.zone{1,z}.FittedWeather);
+        [prediction]=similarpredict(AA(1:k,:),yy2,mm2,dd2,daytypes(1:k),Adays(1:k),daysramezan(1:k),L,InputData.weatherzone{1,z},corp.zone{1,z}.FittedWeather,flagD(1:k,:));
 
         actual=InputData.lsyszone{1,z}(k,6:29);
         [mapes, errors] = calcError(prediction, actual,mm2);        
@@ -122,9 +123,31 @@ for k=1:days
         prediction = [prediction;corp.zone{1,z}.SimilarPredict(k,:)];
         actual=[ actual; InputData.lsyszone{1,z}(i+k-1,6:29)];
     end
-    predictionC =[predictionC; sum(prediction,1)];
-    actualC = [actualC; sum(actual,1)];
+    
+    TotActual=sum(actual,1);
+    TotPrediction=sum(prediction,1);
+    if ~strcmp(corp.name,'system')
+    SiahBishe=InputData.SiahBishe;
+    Industrial=InputData.Industrial;
+    Interchange=InputData.Interchange;
+    if k>1
+        SiahBishe(i+k-2,6:29)=MeanSiahBishe;
+        Industrial(i+k-2,6:29)=MeanIndustrial;
+        Interchange(i+k-2,6:29)=MeanInterchange;
+    end
+    hhh=24-max(sum(SiahBishe(i+k-1,6:29)==0),sum(isnan(SiahBishe(i+k-1,6:29))));
+    MeanSiahBishe=[SiahBishe(i+k-1,6:6+hhh-1) mean(SiahBishe(i-3+k-1:i-1+k-1,6+hhh:29))];
+    MeanIndustrial=[Industrial(i+k-1,6:6+hhh-1) mean(Industrial(i-7+k-1:i-1+k-1,6+hhh:29))];
+    MeanInterchange=[Interchange(i+k-1,6:6+hhh-1) mean(Interchange(i-7+k-1:i-1+k-1,6+hhh:29))];
+    TotPrediction=sum(prediction,1)+MeanInterchange+MeanIndustrial+MeanSiahBishe;
+    TotActual=sum(actual,1)+InputData.Industrial(i+k-1,6:29)+InputData.Interchange(i+k-1,6:29)+InputData.SiahBishe(i+k-1,6:29);
+    end
+    
+    predictionC =[predictionC; TotPrediction];
+    actualC = [actualC; TotActual];
 end
+    
+    
 mapesC=[];
 errorsC=[];
 for k=1:days
