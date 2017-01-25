@@ -21,7 +21,7 @@ if ~isempty(TT2)
     D1=D(1,:);
     DD1=repmat(D1',1,24);
     DF1=reshape(DD1',1,24*size(DD1,1));
-    TT=[DF1];
+    TT=DF1;
     TempNUM=[0,24,168];
 else
     TempNUM=[];

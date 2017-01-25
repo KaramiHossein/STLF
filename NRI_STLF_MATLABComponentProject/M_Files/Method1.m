@@ -11,12 +11,12 @@ indicesT=[];
 indicesH=[];
 indicesN=[];
 
-flag = ~isempty(weatherIn.temp)+ ~isempty(weatherIn.humidity)+ ~isempty(weatherIn.nebulosity);
+flag = ~isempty(weatherIn.Temp)+ ~isempty(weatherIn.Humidity)+ ~isempty(weatherIn.Nebulosity);
 if (flag)
     %%
     weatherT=[];
-    for ii=1:length(weatherIn.temp)
-        weatherT=[weatherT, weatherIn.temp{ii,1}(1:(k+1),[7])];%% mean temperature (7) is selected with trial and error
+    for ii=1:length(weatherIn.Temp)
+        weatherT=[weatherT, weatherIn.Temp{ii,1}(1:(k+1),[7])];%% mean temperature (7) is selected with trial and error
     end
     
     for i=1:(size(weatherT,1)-1)
@@ -24,13 +24,15 @@ if (flag)
     end
      %%
     weatherH=[];
-    for ii=1:length(weatherIn.humidity)
-        weatherH=[weatherH, weatherIn.humidity{ii,1}(1:(k+1),[6])];%% mean humidity (6) is selected with trial and error
+    if ~isempty(weatherIn.Humidity{1,1})
+    for ii=1:length(weatherIn.Humidity)
+        weatherH=[weatherH, weatherIn.Humidity{ii,1}(1:(k+1),[6])];%% mean humidity (6) is selected with trial and error
     end
     
     for i=1:(size(weatherH,1)-1)
         weatherCompareH(i,:) = weatherH(i,:)-weatherH(end,:);
-    end    
+    end
+    end
 %     %% for precipitation
 %     weatherP=[];
 %     for ii=1:length(weatherIn.precipitation)
@@ -46,12 +48,14 @@ if (flag)
 %     end  
     %%
     weatherN=[];
-    for ii=1:length(weatherIn.nebulosity)
-        weatherN=[weatherN, weatherIn.nebulosity{ii,1}(1:(k+1),[6])];%% mean nebulosity (6) is selected with trial and error
+    if ~isempty(weatherIn.Nebulosity{1,1})
+    for ii=1:length(weatherIn.Nebulosity)
+        weatherN=[weatherN, weatherIn.Nebulosity{ii,1}(1:(k+1),[6])];%% mean nebulosity (6) is selected with trial and error
     end
     
     for i=1:(size(weatherN,1)-1)
         weatherCompareN(i,:) = weatherN(i,:)-weatherN(end,:);
+    end
     end
 end
 
@@ -149,7 +153,7 @@ if(~isempty(indices))
             if isempty(FittedWeather)
                 wt=1;
             else
-                wt=1/FittedWeather{1,24-hh+1}(weatherIn.temp{1,1}(indices(end-ind+1)-1,8+24-hh+1));
+                wt=1/FittedWeather{1,24-hh+1}(weatherIn.Temp{1,1}(indices(end-ind+1)-1,8+24-hh+1));
             end
             FW=[wt FW];
         end
@@ -159,8 +163,8 @@ if(~isempty(indices))
                 wt=1;
                 wtT=1;
             else
-                wt=1/FittedWeather{1,i}(weatherIn.temp{1,1}(indices(end-ind+1),8+i));
-                wtT=1/FittedWeather{1,i}(weatherIn.temp{1,1}(k+1,8+i));
+                wt=1/FittedWeather{1,i}(weatherIn.Temp{1,1}(indices(end-ind+1),8+i));
+                wtT=1/FittedWeather{1,i}(weatherIn.Temp{1,1}(k+1,8+i));
             end
             m1a(i)=WeightedMean(DD,FW)*(1+(0.04*(wtT-wt)/wtT));
 
@@ -180,7 +184,7 @@ if(~isempty(indices))
         if isempty(FittedWeather)
             wt=1;
         else
-            wt=1/FittedWeather{1,24-hh+1}(weatherIn.temp{1,1}(k,8+24-hh+1));
+            wt=1/FittedWeather{1,24-hh+1}(weatherIn.Temp{1,1}(k,8+24-hh+1));
         end
         FW2=[wt FW2];
     end
@@ -190,7 +194,7 @@ if(~isempty(indices))
         if isempty(FittedWeather)
             wt=1;
         else
-            wt=1/FittedWeather{1,i}(weatherIn.temp{1,1}(k+1,8+i));
+            wt=1/FittedWeather{1,i}(weatherIn.Temp{1,1}(k+1,8+i));
         end
         if(isnan(AToday(i)) || AToday(i)==0)
             m1b=WeightedMean(DD2,FW2);

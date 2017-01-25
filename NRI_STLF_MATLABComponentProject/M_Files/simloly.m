@@ -5,10 +5,10 @@
 
 function [output]=simloly(TempNUM,net,input)
 
-if nargin > 3  error('too many input arguments');    end;
-if nargin < 3  error('not enough input arguments');  end;
+if nargin > 3  ; error('too many input arguments');    end;
+if nargin < 3  ; error('not enough input arguments');  end;
 
-[row_in col_in]=size(input);
+[row_in,col_in]=size(input);
 %--------------input normalization------------------------------
 SizeTemp=length(TempNUM);
 MAX=max(abs(input(1:end-SizeTemp)));
@@ -25,7 +25,7 @@ if col_in+1 ~= length(net(1).weight)
     error('input and netwrok are not matched');
 end;
 
-[useless len]=size(net);
+[useless,len]=size(net);
 for i=1:len
     mem(:,i)=phi(input,net(i).sigma,net(i).center);
 end;
@@ -38,8 +38,8 @@ output=out_calc(net,mem,input);
 output=output*MAX;
 
 %--------Local LLNM output Calculator--------------------------
-function [output]=out_calc(net,membership,input);
-[row col]=size(membership);
+function [output]=out_calc(net,membership,input)
+[row,col]=size(membership);
 for i=1:col  %
     weight=net(i).weight;
     out=input*weight;%17/11/93
@@ -48,8 +48,8 @@ end;
 output=(sum(output'))';
 
 %----------Membership Calculation------------------------------
-function [membership]=phi(input,sigma,center);
-[row col]=size(input);
+function [membership]=phi(input,sigma,center)
+[row,col]=size(input);
 for j=1:row
     product=1;
     for i=1:col
