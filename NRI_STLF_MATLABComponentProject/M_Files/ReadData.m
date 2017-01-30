@@ -1,63 +1,121 @@
 function [Data]=ReadData(yy,N,corp,AppPath)
 
-zoneno=length(corp.zone);
+ZoneNo=length(corp.zone);
 corp_name=corp.name;
 
-Data.lsyszone=cell(1,zoneno);
-Data.flag=cell(1,zoneno);
-Data.weatherzone=cell(1,zoneno);
-Data.Interchange=[];
-Data.Industrial=[];
-Data.SiahBishe=[];
-for zone=1:zoneno
-    weatherno=length(corp.zone{zone}.weathername);
-    Data.weatherzone{1,zone}.temp=cell(weatherno,1);
-    humidityno=length(corp.zone{zone}.humidityname);
-    Data.weatherzone{1,zone}.humidity=cell(humidityno,1);
-    nebulosityno=length(corp.zone{zone}.nebulosityname);
-    Data.weatherzone{1,zone}.nebulosity=cell(nebulosityno,1);
+Data.Zone=cell(1,ZoneNo);
+for zone=1:ZoneNo
+    Data.Zone{1,zone}.Load.Manategh=[];
+    Data.Zone{1,zone}.Load.Industrial=[];
+    Data.Zone{1,zone}.Load.Interchange=[];
+%     Data.Zone{1,zone}.Load.Peak=[];
+    Data.Zone{1,zone}.Load.Pump=[];
+    Data.Zone{1,zone}.flag=[];
+    Data.Zone{1,zone}.Weather.Nebulosity=cell(1,1);
+    Data.Zone{1,zone}.Weather.Humidity=cell(1,1);
+    Data.Zone{1,zone}.Weather.Temp=cell(1,1);
 end
 
 loadDataPath=[AppPath,'\LoadData'];
 weatherDataPath = [AppPath,'\WeatherData'];
 calendarDataPath = [AppPath,'\Calendar'];
-calH=[];calD=[];
+calH=[];
+calD=[];
 
 for i=yy-N:yy
-    for zone=1:zoneno
-        A=[];
-        C=[];
-        D=[];
+    for zone=1:ZoneNo
+        %% Load Data
         cd(loadDataPath);
-        lsys=[];
+        %% Load Manategh Data
+        A1=[];
         name0=['L_',corp_name];
         name1=[name0,num2str(i),'.xls'];
         if(exist(name1)>0)
-            A=xlsread(name1,corp.zone{zone}.name);
+            A1=xlsread(name1,corp.zone{zone}.name);
         else
             name1=[name0,num2str(i),'.xlsx'];
-            A=xlsread(name1,corp.zone{zone}.name);
+            A1=xlsread(name1,corp.zone{zone}.name);
+        end
+        Data.Zone{1,zone}.Load.Manategh=[Data.Zone{1,zone}.Load.Manategh; A1(:,1:31)];
+        
+        %% Load Industrial Data
+        if i>yy-2
+            A2=[];
+            name1=['L_Industrial',num2str(i),'.xls'];
+            if(exist(name1)>0)
+                A2=xlsread(name1,corp.zone{zone}.name);
+            else
+                name1=[name1,'x'];
+                A2=xlsread(name1,corp.zone{zone}.name);
+            end
+            if size(A2,2)<31
+                A2(end,31)=nan(1,1);
+            end
+            Data.Zone{1,zone}.Load.Industrial=[Data.Zone{1,zone}.Load.Industrial; A2(:,1:31)];
+        end
+        
+        %% Load Interchange Data
+        if i>yy-2
+            A3=[];
+            name1=['L_Interchange',num2str(i),'.xls'];
+            if(exist(name1)>0)
+                A3=xlsread(name1,corp.zone{zone}.name);
+            else
+                name1=[name1,'x'];
+                A3=xlsread(name1,corp.zone{zone}.name);
+            end
+            if size(A3,2)<31
+                A3(end,31)=nan(1,1);
+            end
+            Data.Zone{1,zone}.Load.Interchange=[Data.Zone{1,zone}.Load.Interchange; A3(:,1:31)];
+        end
+        
+%         %% Load Peak Data
+%         A4=[];
+%         name1=['L_Peak',num2str(i),'.xls'];
+%         if(exist(name1)>0)
+%             A4=xlsread(name1,corp.zone{zone}.name);
+%         else
+%             name1=[name1,'x'];
+%             A4=xlsread(name1,corp.zone{zone}.name);
+%         end
+%         Data.Zone{1,zone}.Load.Peak=[Data.Zone{1,zone}.Load.Peak; A4(:,1:7)];
+%         
+        %% Load Pump Data
+        if i>yy-2
+            A5=[];
+            name1=['L_Pump',num2str(i),'.xls'];
+            if(exist(name1)>0)
+                A5=xlsread(name1,corp.zone{zone}.name);
+            else
+                name1=[name1,'x'];
+                A5=xlsread(name1,corp.zone{zone}.name);
+            end
+            if size(A5,2)<31
+                A5(end,31)=nan(1,1);
+            end
+            Data.Zone{1,zone}.Load.Pump=[Data.Zone{1,zone}.Load.Pump; A5(:,1:31)];
         end
         cd('..');
-        Data.lsyszone{1,zone}=[Data.lsyszone{1,zone}; A(:,1:29)];
         
-        %% days flag (test) mkarimi
+        %% days flag
         cd('flag');
+        Df=[];
         name5=['flag',num2str(i),'.xls'];
         if(exist(name5)>0)
-            ff=xlsread(name5);
+            Df=xlsread(name5);
         else
             name5=['flag',num2str(i),'.xlsx'];
-            ff=xlsread(name5);
+            Df=xlsread(name5);
         end
-        flagD=ff;
         cd('..');
-        Data.flag{1,zone}=[Data.flag{1,zone}; flagD];
+        Data.Zone{1,zone}.flag=[Data.Zone{1,zone}.flag; Df];
+        
         %% temperature
-        weatherno=length(corp.zone{zone}.weathername);
-        if(weatherno ~=0)
+        CityTempNo=length(corp.zone{zone}.weathername);
+        if(CityTempNo ~=0)
             cd(weatherDataPath);
-            for j=1:weatherno
+            for j=1:CityTempNo
                 name1=['T_',corp.zone{zone}.weathername{j,1}];
                 cd(name1);
                 B=[];
@@ -69,15 +127,16 @@ for i=yy-N:yy
                     B=xlsread(name2);
                 end
                 cd('..');
-                Data.weatherzone{1,zone}.temp{j,1}=[Data.weatherzone{1,zone}.temp{j,1};B(:,1:8)];
+                Data.Zone{1,zone}.Weather.Temp{j,1}=[Data.Zone{1,zone}.Weather.Temp{j,1};B(:,1:8)];
             end
             cd('..');
         end
+        
         %% humidity %%%% need to change!!!!!!!!!!
-        humidityno=length(corp.zone{zone}.humidityname);
-        if(humidityno ~=0)
+        CityHumidityNo=length(corp.zone{zone}.humidityname);
+        if(CityHumidityNo ~=0)
             cd(weatherDataPath);
-            for j=1:humidityno
+            for j=1:CityHumidityNo
                 name1=['T_',corp.zone{zone}.humidityname{j,1}];
                 cd(name1);
                 B=[];
@@ -89,16 +148,16 @@ for i=yy-N:yy
                     B=xlsread(name2);
                 end
                 cd('..');
-                Data.weatherzone{1,zone}.humidity{j,1}=[Data.weatherzone{1,zone}.humidity{j,1};B(:,1:5)  B(:,13)];%% must change
+                Data.Zone{1,zone}.Weather.Humidity{j,1}=[Data.Zone{1,zone}.Weather.Humidity{j,1};B(:,1:5)  B(:,13)];%% must change
             end
             cd('..');
         end
         
         %% nebulosity %%%% need to change!!!!!!!!!!
-        nebulosityno=length(corp.zone{zone}.nebulosityname);
-        if(nebulosityno ~=0)
+        CityNebulosityNo=length(corp.zone{zone}.nebulosityname);
+        if(CityNebulosityNo ~=0)
             cd(weatherDataPath);
-            for j=1:nebulosityno
+            for j=1:CityNebulosityNo
                 name1=['T_',corp.zone{zone}.nebulosityname{j,1}];
                 cd(name1);
                 B=[];
@@ -110,45 +169,14 @@ for i=yy-N:yy
                     B=xlsread(name2);
                 end
                 cd('..');
-                Data.weatherzone{1,zone}.nebulosity{j,1}=[Data.weatherzone{1,zone}.nebulosity{j,1};B(:,1:5) B(:,25)];%% must change
+                Data.Zone{1,zone}.Weather.Nebulosity{j,1}=[Data.Zone{1,zone}.Weather.Nebulosity{j,1};B(:,1:5) B(:,25)];%% must change
             end
             cd('..');
         end
         
     end
-    % Industrial & Interchange & SiahBishe
     
-    cd(loadDataPath);
-    name6=['L_Industrial',num2str(i),'.xls'];
-        if(exist(name6)>0)
-            Ind=xlsread(name6);
-        else
-            name6=['L_Industrial',num2str(i),'.xlsx'];
-            Ind=xlsread(name6);
-        end
-        Data.Industrial=[Data.Industrial;Ind];
-        
-        name7=['L_Interchange',num2str(i),'.xls'];
-        if(exist(name7)>0)
-            Inter=xlsread(name7);
-        else
-            name7=['L_Interchange',num2str(i),'.xlsx'];
-            Inter=xlsread(name7);
-        end
-        Data.Interchange=[Data.Interchange;Inter];
-        
-        name8=['L_SiahBishe',num2str(i),'.xls'];
-        if(exist(name8)>0)
-            SiahBishe=xlsread(name8);
-        else
-            name8=['L_SiahBishe',num2str(i),'.xlsx'];
-            SiahBishe=xlsread(name8);
-        end
-        Data.SiahBishe=[Data.SiahBishe;SiahBishe];
-        
-    cd('..');
-    
-    % Calendar Set Up
+    %% Calendar Set Up
     
     cd(calendarDataPath);
     name5=['caln',num2str(i),'.xls'];
@@ -169,21 +197,7 @@ for i=yy-N:yy
     cd('..');
     calH=[calH;calD];
 end
-%% for test
-% B1=xlsread('E:\m karimi\STLF\DATA havashenasi\pajoheshgah niro-moslemi1.xlsx','sari');
-% B2=xlsread('E:\m karimi\STLF\DATA havashenasi\pajoheshgah niro-moslemi1.xlsx','rasht');
-% B3=xlsread('E:\m karimi\STLF\DATA havashenasi\pajoheshgah niro-moslemi1.xlsx','bandarabbas');
-% Data.weatherzone{1,1}.humidity{1,1}(:,6)=B1(:,10);
-% Data.weatherzone{1,2}.humidity{1,1}(:,6)=B2(:,10);
-% Data.weatherzone{1,3}.humidity{1,1}(:,6)=B3(:,10);
-% Data.weatherzone{1,1}.nebulosity{1,1}(:,6)=B1(:,11);
-% Data.weatherzone{1,2}.nebulosity{1,1}(:,6)=B2(:,11);
-% Data.weatherzone{1,3}.nebulosity{1,1}(:,6)=B3(:,11);
-%
-% load WD1;
-% B2=reshape(B1,24,365*2)';
-% Data.weatherzone{1,1}.temp{1,1}(:,9:32)=B2;
-% end for test
+
 Data.cal.calH=calH;
 Data.cal.calD=calD;
 Data.cal.Ghcal=Egh;
