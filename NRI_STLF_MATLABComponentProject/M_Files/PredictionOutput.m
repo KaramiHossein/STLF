@@ -2,7 +2,7 @@ function PredictionOutput(corp, actual, days, flgSimilar, flgBNN, flgNeuro, flgL
 
 %%% 5 columns of actual is date data and 24 columns of actual is Load Data.
 
-        
+
 for lct=1:days
     if(actual(lct,4)==1)
         temp = 'Saturday';
@@ -19,9 +19,9 @@ for lct=1:days
     elseif(actual(lct,4)==7)
         temp = 'Friday';
     end
-    if all(isnan(actual(lct,6:29))==0) && all(actual(lct,6:29)~=0)        
-                
-        figure();  
+    if all(isnan(actual(lct,6:29))==0) && all(actual(lct,6:29)~=0)
+        
+        figure();
         hold on
         titleText = {['\bf',corp.name,' Load Forecasting,','\rm Date:',num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3)),', ',temp];};
         plot(actual(lct,6:29),'r');
@@ -53,16 +53,16 @@ for lct=1:days
             plot(corp.Neuro.Predict.Total(lct,:),'c');
             legendText(end+1)={'NeuroFuuzy Prediction'};
             %
-            predictError=[predictError; corp.Neuro.Errors.Total(lct,:)]; 
+            predictError=[predictError; corp.Neuro.Errors.Total(lct,:)];
             legendText2(end+1)={'NeuroFuuzy Errors'};
             Color =[Color;'c'];
         end
-        if(flgLSQ>0)            
+        if(flgLSQ>0)
             titleText(end+1)={['LSQ: mape=',num2str(corp.LSQ.Mapes.Total(lct,1)),'% ','maxError=',num2str(max(corp.LSQ.Errors.Total(lct,:))),'%']};
             plot(corp.LSQ.Predict.Total(lct,:),'m');
-            legendText(end+1)={'LSQ Prediction'};  
+            legendText(end+1)={'LSQ Prediction'};
             %
-            predictError=[predictError; corp.LSQ.Errors.Total(lct,:)];          
+            predictError=[predictError; corp.LSQ.Errors.Total(lct,:)];
             legendText2(end+1)={'LSQ Errors'};
             Color =[Color;'m'];
         end
@@ -75,43 +75,43 @@ for lct=1:days
         hold off
         
         
-
-%         figure(lct+days);
-        figure();  
-        hold on;                
+        
+        %         figure(lct+days);
+        figure();
+        hold on;
         hbar = bar(predictError');
         for ii=1:size(Color,1)
             set(hbar(ii),'FaceColor',Color(ii));
         end
         legend(legendText2,'Location','NorthWest');
         title(titleText);
-        grid on;        
+        grid on;
         ylabel('Error');
         xlabel('Hour');
         hold off
         
     else
-%         figure(lct);  
-figure();  
+        %         figure(lct);
+        figure();
         hold on
         titleText = {['\bf',corp.name,' Load Forecasting,','\rm Date:',num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3)), ', ',temp];};
         legendText={};
         
         if(flgSimilar>0)
             plot(corp.Similar.Predict.Total(lct,:),'b');
-            legendText(end+1)={'SimilarDay Prediction'};            
+            legendText(end+1)={'SimilarDay Prediction'};
         end
         if(flgBNN>0)
             plot(corp.BNN.Predict.Total(lct,:),'g');
-            legendText(end+1)={'BNN Prediction'};            
+            legendText(end+1)={'BNN Prediction'};
         end
         if(flgNeuro>0)
             plot(corp.Neuro.Predict.Total(lct,:),'c');
-            legendText(end+1)={'NeuroFuuzy Prediction'};            
+            legendText(end+1)={'NeuroFuuzy Prediction'};
         end
-        if(flgLSQ>0)            
+        if(flgLSQ>0)
             plot(corp.LSQ.Predict.Total(lct,:),'m');
-            legendText(end+1)={'LSQ Prediction'};           
+            legendText(end+1)={'LSQ Prediction'};
         end
         
         legend(legendText,'Location','NorthWest');
@@ -152,7 +152,7 @@ for lct=1:days
                 Total_xls_vector1(end,3+I)={num2str(corp.zone{1, I}.Similar.Predict.Total(lct,II))};
             end
         end
-%         Total_xls_vector1=[Total_xls_vector1 {' '} {' '} {' '} {' '} ];
+        %         Total_xls_vector1=[Total_xls_vector1 {' '} {' '} {' '} {' '} ];
     end
     
     
@@ -168,7 +168,7 @@ for lct=1:days
                 Total_xls_vector2(end,3+I)={num2str(corp.zone{1, I}.BNN.Predict.Total(lct,II))};
             end
         end
-%         Total_xls_vector2=[Total_xls_vector2 {' '} {' '} {' '} {' '} ];
+        %         Total_xls_vector2=[Total_xls_vector2 {' '} {' '} {' '} {' '} ];
     end
     
     
@@ -184,7 +184,7 @@ for lct=1:days
                 Total_xls_vector3(end,3+I)={num2str(corp.zone{1, I}.Neuro.Predict.Total(lct,II))};
             end
         end
-%         Total_xls_vector3=[Total_xls_vector3 {' '} {' '} {' '} {' '} ];
+        %         Total_xls_vector3=[Total_xls_vector3 {' '} {' '} {' '} {' '} ];
     end
     
     
@@ -200,7 +200,7 @@ for lct=1:days
                 Total_xls_vector4(end,3+I)={num2str(corp.zone{1, I}.LSQ.Predict.Total(lct,II))};
             end
         end
-%         Total_xls_vector4=[Total_xls_vector4 {' '} {' '} {' '} {' '} ];
+        %         Total_xls_vector4=[Total_xls_vector4 {' '} {' '} {' '} {' '} ];
     end
     Total_xls_vector=[Total_xls_vector;Total_xls_vector1 Total_xls_vector2 Total_xls_vector3 Total_xls_vector4];
     Total_xls_vector=[Total_xls_vector;cell(5,size(Total_xls_vector,2))];
@@ -229,7 +229,7 @@ for lct=1:days
                 Manategh_xls_vector1(end,3+I)={num2str(corp.zone{1, I}.Similar.Predict.Manategh(lct,II))};
             end
         end
-%         Manategh_xls_vector1=[Manategh_xls_vector1 {' '} {' '} {' '} {' '} ];
+        %         Manategh_xls_vector1=[Manategh_xls_vector1 {' '} {' '} {' '} {' '} ];
     end
     
     
@@ -245,7 +245,7 @@ for lct=1:days
                 Manategh_xls_vector2(end,3+I)={num2str(corp.zone{1, I}.BNN.Predict.Manategh(lct,II))};
             end
         end
-%         Manategh_xls_vector2=[Manategh_xls_vector2 {' '} {' '} {' '} {' '} ];
+        %         Manategh_xls_vector2=[Manategh_xls_vector2 {' '} {' '} {' '} {' '} ];
     end
     
     
@@ -261,7 +261,7 @@ for lct=1:days
                 Manategh_xls_vector3(end,3+I)={num2str(corp.zone{1, I}.Neuro.Predict.Manategh(lct,II))};
             end
         end
-%         Manategh_xls_vector3=[Manategh_xls_vector3 {' '} {' '} {' '} {' '} ];
+        %         Manategh_xls_vector3=[Manategh_xls_vector3 {' '} {' '} {' '} {' '} ];
     end
     
     
@@ -277,11 +277,11 @@ for lct=1:days
                 Manategh_xls_vector4(end,3+I)={num2str(corp.zone{1, I}.LSQ.Predict.Manategh(lct,II))};
             end
         end
-%         Manategh_xls_vector4=[Manategh_xls_vector4 {' '} {' '} {' '} {' '} ];
+        %         Manategh_xls_vector4=[Manategh_xls_vector4 {' '} {' '} {' '} {' '} ];
     end
     Manategh_xls_vector=[Manategh_xls_vector;Manategh_xls_vector1 Manategh_xls_vector2 Manategh_xls_vector3 Manategh_xls_vector4];
     Manategh_xls_vector=[Manategh_xls_vector;cell(5,size(Manategh_xls_vector,2))];
-
+    
     
     
 end
@@ -308,7 +308,7 @@ for lct=1:days
                 Industrial_xls_vector1(end,3+I)={num2str(corp.zone{1, I}.Similar.Predict.Industrial(lct,II))};
             end
         end
-%         Industrial_xls_vector1=[Industrial_xls_vector1 {' '} {' '} {' '} {' '} ];
+        %         Industrial_xls_vector1=[Industrial_xls_vector1 {' '} {' '} {' '} {' '} ];
     end
     
     
@@ -324,7 +324,7 @@ for lct=1:days
                 Industrial_xls_vector2(end,3+I)={num2str(corp.zone{1, I}.BNN.Predict.Industrial(lct,II))};
             end
         end
-%         Industrial_xls_vector2=[Industrial_xls_vector2 {' '} {' '} {' '} {' '} ];
+        %         Industrial_xls_vector2=[Industrial_xls_vector2 {' '} {' '} {' '} {' '} ];
     end
     
     
@@ -340,7 +340,7 @@ for lct=1:days
                 Industrial_xls_vector3(end,3+I)={num2str(corp.zone{1, I}.Neuro.Predict.Industrial(lct,II))};
             end
         end
-%         Industrial_xls_vector3=[Industrial_xls_vector3 {' '} {' '} {' '} {' '} ];
+        %         Industrial_xls_vector3=[Industrial_xls_vector3 {' '} {' '} {' '} {' '} ];
     end
     
     
@@ -356,11 +356,11 @@ for lct=1:days
                 Industrial_xls_vector4(end,3+I)={num2str(corp.zone{1, I}.LSQ.Predict.Industrial(lct,II))};
             end
         end
-%         Industrial_xls_vector4=[Industrial_xls_vector4 {' '} {' '} {' '} {' '} ];
+        %         Industrial_xls_vector4=[Industrial_xls_vector4 {' '} {' '} {' '} {' '} ];
     end
     Industrial_xls_vector=[Industrial_xls_vector;Industrial_xls_vector1 Industrial_xls_vector2 Industrial_xls_vector3 Industrial_xls_vector4];
     Industrial_xls_vector=[Industrial_xls_vector;cell(5,size(Industrial_xls_vector,2))];
-
+    
     
 end
 
@@ -387,7 +387,7 @@ for lct=1:days
                 Interchange_xls_vector1(end,3+I)={num2str(corp.zone{1, I}.Similar.Predict.Interchange(lct,II))};
             end
         end
-%         Interchange_xls_vector1=[Interchange_xls_vector1 {' '} {' '} {' '} {' '} ];
+        %         Interchange_xls_vector1=[Interchange_xls_vector1 {' '} {' '} {' '} {' '} ];
     end
     
     
@@ -403,7 +403,7 @@ for lct=1:days
                 Interchange_xls_vector2(end,3+I)={num2str(corp.zone{1, I}.BNN.Predict.Interchange(lct,II))};
             end
         end
-%         Interchange_xls_vector2=[Interchange_xls_vector2 {' '} {' '} {' '} {' '} ];
+        %         Interchange_xls_vector2=[Interchange_xls_vector2 {' '} {' '} {' '} {' '} ];
     end
     
     
@@ -419,7 +419,7 @@ for lct=1:days
                 Interchange_xls_vector3(end,3+I)={num2str(corp.zone{1, I}.Neuro.Predict.Interchange(lct,II))};
             end
         end
-%         Interchange_xls_vector3=[Interchange_xls_vector3 {' '} {' '} {' '} {' '} ];
+        %         Interchange_xls_vector3=[Interchange_xls_vector3 {' '} {' '} {' '} {' '} ];
     end
     
     
@@ -435,7 +435,7 @@ for lct=1:days
                 Interchange_xls_vector4(end,3+I)={num2str(corp.zone{1, I}.LSQ.Predict.Interchange(lct,II))};
             end
         end
-%         Interchange_xls_vector4=[Interchange_xls_vector4 {' '} {' '} {' '} {' '} ];
+        %         Interchange_xls_vector4=[Interchange_xls_vector4 {' '} {' '} {' '} {' '} ];
     end
     Interchange_xls_vector=[Interchange_xls_vector;Interchange_xls_vector1 Interchange_xls_vector2 Interchange_xls_vector3 Interchange_xls_vector4];
     Interchange_xls_vector=[Interchange_xls_vector;cell(5,size(Interchange_xls_vector,2))];
@@ -465,7 +465,7 @@ for lct=1:days
                 Pump_xls_vector1(end,3+I)={num2str(corp.zone{1, I}.Similar.Predict.Pump(lct,II))};
             end
         end
-%         Pump_xls_vector1=[Pump_xls_vector1 {' '} {' '} {' '} {' '} ];
+        %         Pump_xls_vector1=[Pump_xls_vector1 {' '} {' '} {' '} {' '} ];
     end
     
     
@@ -481,7 +481,7 @@ for lct=1:days
                 Pump_xls_vector2(end,3+I)={num2str(corp.zone{1, I}.BNN.Predict.Pump(lct,II))};
             end
         end
-%         Pump_xls_vector2=[Pump_xls_vector2 {' '} {' '} {' '} {' '} ];
+        %         Pump_xls_vector2=[Pump_xls_vector2 {' '} {' '} {' '} {' '} ];
     end
     
     
@@ -497,7 +497,7 @@ for lct=1:days
                 Pump_xls_vector3(end,3+I)={num2str(corp.zone{1, I}.Neuro.Predict.Pump(lct,II))};
             end
         end
-%         Pump_xls_vector3=[Pump_xls_vector3 {' '} {' '} {' '} {' '} ];
+        %         Pump_xls_vector3=[Pump_xls_vector3 {' '} {' '} {' '} {' '} ];
     end
     
     
@@ -513,7 +513,7 @@ for lct=1:days
                 Pump_xls_vector4(end,3+I)={num2str(corp.zone{1, I}.LSQ.Predict.Pump(lct,II))};
             end
         end
-%         Pump_xls_vector4=[Pump_xls_vector4 {' '} {' '} {' '} {' '} ];
+        %         Pump_xls_vector4=[Pump_xls_vector4 {' '} {' '} {' '} {' '} ];
     end
     Pump_xls_vector=[Pump_xls_vector;Pump_xls_vector1 Pump_xls_vector2 Pump_xls_vector3 Pump_xls_vector4];
     Pump_xls_vector=[Pump_xls_vector;cell(5,size(Pump_xls_vector,2))];
@@ -523,160 +523,160 @@ end
 
 
 %% Errors
-if sum(sum(isnan(corp.Neuro.Errors.Manategh)))==0
-Errors_xls_vector1={};
-Errors_xls_vector2={};
-Errors_xls_vector3={};
-Errors_xls_vector4={};
-Errors_xls_vector={};
-for lct=1:days
-    
-    
-    if(flgSimilar>0)
-        Errors_xls_vector1=obj;
-        Errors_xls_vector1(end,2)={'Similar Method'};
-        Errors_xls_vector1(end+1,:)= obj1;
-        for II=1:24
-            Errors_xls_vector1(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
-            Errors_xls_vector1(end,2)={num2str(II)};
-            Errors_xls_vector1(end,3)={num2str(corp.Similar.Errors.Total(lct,II))};
-            for I=1:length(corp.zone)
-                Errors_xls_vector1(end,3+I)={num2str(corp.zone{1, I}.Similar.Errors.Total(lct,II))};
+if ((flgSimilar>0) && sum(sum(isnan(corp.Similar.Errors.Manategh)))==0) || ((flgNeuro>0) && sum(sum(isnan(corp.Neuro.Errors.Manategh)))==0) || ((flgBNN>0) && sum(sum(isnan(corp.BNN.Errors.Manategh)))==0) || ((flgLSQ>0) && sum(sum(isnan(corp.LSQ.Errors.Manategh)))==0)
+    Errors_xls_vector1={};
+    Errors_xls_vector2={};
+    Errors_xls_vector3={};
+    Errors_xls_vector4={};
+    Errors_xls_vector={};
+    for lct=1:days
+        
+        
+        if(flgSimilar>0)
+            Errors_xls_vector1=obj;
+            Errors_xls_vector1(end,2)={'Similar Method'};
+            Errors_xls_vector1(end+1,:)= obj1;
+            for II=1:24
+                Errors_xls_vector1(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
+                Errors_xls_vector1(end,2)={num2str(II)};
+                Errors_xls_vector1(end,3)={num2str(corp.Similar.Errors.Total(lct,II))};
+                for I=1:length(corp.zone)
+                    Errors_xls_vector1(end,3+I)={num2str(corp.zone{1, I}.Similar.Errors.Total(lct,II))};
+                end
             end
+            %         Errors_xls_vector1=[Errors_xls_vector1 {' '} {' '} {' '} {' '} ];
         end
-%         Errors_xls_vector1=[Errors_xls_vector1 {' '} {' '} {' '} {' '} ];
-    end
-    
-    
-    if(flgBNN>0)
-        Errors_xls_vector2=obj;
-        Errors_xls_vector2(end,2)={'BNN Method'};
-        Errors_xls_vector2(end+1,:)= obj1;
-        for II=1:24
-            Errors_xls_vector2(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
-            Errors_xls_vector2(end,2)={num2str(II)};
-            Errors_xls_vector2(end,3)={num2str(corp.BNN.Errors.Total(lct,II))};
-            for I=1:length(corp.zone)
-                Errors_xls_vector2(end,3+I)={num2str(corp.zone{1, I}.BNN.Errors.Total(lct,II))};
+        
+        
+        if(flgBNN>0)
+            Errors_xls_vector2=obj;
+            Errors_xls_vector2(end,2)={'BNN Method'};
+            Errors_xls_vector2(end+1,:)= obj1;
+            for II=1:24
+                Errors_xls_vector2(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
+                Errors_xls_vector2(end,2)={num2str(II)};
+                Errors_xls_vector2(end,3)={num2str(corp.BNN.Errors.Total(lct,II))};
+                for I=1:length(corp.zone)
+                    Errors_xls_vector2(end,3+I)={num2str(corp.zone{1, I}.BNN.Errors.Total(lct,II))};
+                end
             end
+            %         Errors_xls_vector2=[Errors_xls_vector2 {' '} {' '} {' '} {' '} ];
         end
-%         Errors_xls_vector2=[Errors_xls_vector2 {' '} {' '} {' '} {' '} ];
-    end
-    
-    
-    if(flgNeuro>0)
-        Errors_xls_vector3=obj;
-        Errors_xls_vector3(end,2)={'Neuro-Fuzzy Method'};
-        Errors_xls_vector3(end+1,:)= obj1;
-        for II=1:24
-            Errors_xls_vector3(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
-            Errors_xls_vector3(end,2)={num2str(II)};
-            Errors_xls_vector3(end,3)={num2str(corp.Neuro.Errors.Total(lct,II))};
-            for I=1:length(corp.zone)
-                Errors_xls_vector3(end,3+I)={num2str(corp.zone{1, I}.Neuro.Errors.Total(lct,II))};
+        
+        
+        if(flgNeuro>0)
+            Errors_xls_vector3=obj;
+            Errors_xls_vector3(end,2)={'Neuro-Fuzzy Method'};
+            Errors_xls_vector3(end+1,:)= obj1;
+            for II=1:24
+                Errors_xls_vector3(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
+                Errors_xls_vector3(end,2)={num2str(II)};
+                Errors_xls_vector3(end,3)={num2str(corp.Neuro.Errors.Total(lct,II))};
+                for I=1:length(corp.zone)
+                    Errors_xls_vector3(end,3+I)={num2str(corp.zone{1, I}.Neuro.Errors.Total(lct,II))};
+                end
             end
+            %         Errors_xls_vector3=[Errors_xls_vector3 {' '} {' '} {' '} {' '} ];
         end
-%         Errors_xls_vector3=[Errors_xls_vector3 {' '} {' '} {' '} {' '} ];
-    end
-    
-    
-    if(flgLSQ>0)
-        Errors_xls_vector4=obj;
-        Errors_xls_vector4(end,2)={'BNN Method'};
-        Errors_xls_vector4(end+1,:)= obj1;
-        for II=1:24
-            Errors_xls_vector4(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
-            Errors_xls_vector4(end,2)={num2str(II)};
-            Errors_xls_vector4(end,3)={num2str(corp.LSQ.Errors.Total(lct,II))};
-            for I=1:length(corp.zone)
-                Errors_xls_vector4(end,3+I)={num2str(corp.zone{1, I}.LSQ.Errors.Total(lct,II))};
+        
+        
+        if(flgLSQ>0)
+            Errors_xls_vector4=obj;
+            Errors_xls_vector4(end,2)={'BNN Method'};
+            Errors_xls_vector4(end+1,:)= obj1;
+            for II=1:24
+                Errors_xls_vector4(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
+                Errors_xls_vector4(end,2)={num2str(II)};
+                Errors_xls_vector4(end,3)={num2str(corp.LSQ.Errors.Total(lct,II))};
+                for I=1:length(corp.zone)
+                    Errors_xls_vector4(end,3+I)={num2str(corp.zone{1, I}.LSQ.Errors.Total(lct,II))};
+                end
             end
+            %         Errors_xls_vector4=[Errors_xls_vector4 {' '} {' '} {' '} {' '} ];
         end
-%         Errors_xls_vector4=[Errors_xls_vector4 {' '} {' '} {' '} {' '} ];
+        Errors_xls_vector=[Errors_xls_vector;Errors_xls_vector1 Errors_xls_vector2 Errors_xls_vector3 Errors_xls_vector4];
+        Errors_xls_vector=[Errors_xls_vector;cell(5,size(Errors_xls_vector,2))];
+        
     end
-    Errors_xls_vector=[Errors_xls_vector;Errors_xls_vector1 Errors_xls_vector2 Errors_xls_vector3 Errors_xls_vector4];
-    Errors_xls_vector=[Errors_xls_vector;cell(5,size(Errors_xls_vector,2))];
-    
-end
 end
 
 
 %% Mapes
-if sum(sum(isnan(corp.Neuro.Errors.Manategh)))==0
-Mapes_xls_vector1={};
-Mapes_xls_vector2={};
-Mapes_xls_vector3={};
-Mapes_xls_vector4={};
-Mapes_xls_vector={};
-for lct=1:days
-    
-    
-    if(flgSimilar>0)
-        Mapes_xls_vector1=obj;
-        Mapes_xls_vector1(end,2)={'Similar Method'};
-        Mapes_xls_vector1(end+1,:)= obj1;
-        for II=1:4
-            Mapes_xls_vector1(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
-            Mapes_xls_vector1(end,2)={num2str(II)};
-            Mapes_xls_vector1(end,3)={num2str(corp.Similar.Mapes.Total(lct,II))};
-            for I=1:length(corp.zone)
-                Mapes_xls_vector1(end,3+I)={num2str(corp.zone{1, I}.Similar.Mapes.Total(lct,II))};
+if ((flgSimilar>0) && sum(sum(isnan(corp.Similar.Errors.Manategh)))==0) || ((flgNeuro>0) && sum(sum(isnan(corp.Neuro.Errors.Manategh)))==0) || ((flgBNN>0) && sum(sum(isnan(corp.BNN.Errors.Manategh)))==0) || ((flgLSQ>0) && sum(sum(isnan(corp.LSQ.Errors.Manategh)))==0)
+    Mapes_xls_vector1={};
+    Mapes_xls_vector2={};
+    Mapes_xls_vector3={};
+    Mapes_xls_vector4={};
+    Mapes_xls_vector={};
+    for lct=1:days
+        
+        
+        if(flgSimilar>0)
+            Mapes_xls_vector1=obj;
+            Mapes_xls_vector1(end,2)={'Similar Method'};
+            Mapes_xls_vector1(end+1,:)= obj1;
+            for II=1:4
+                Mapes_xls_vector1(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
+                Mapes_xls_vector1(end,2)={num2str(II)};
+                Mapes_xls_vector1(end,3)={num2str(corp.Similar.Mapes.Total(lct,II))};
+                for I=1:length(corp.zone)
+                    Mapes_xls_vector1(end,3+I)={num2str(corp.zone{1, I}.Similar.Mapes.Total(lct,II))};
+                end
             end
+            %         Mapes_xls_vector1=[Mapes_xls_vector1 {' '} {' '} {' '} {' '} ];
         end
-%         Mapes_xls_vector1=[Mapes_xls_vector1 {' '} {' '} {' '} {' '} ];
-    end
-    
-    
-    if(flgBNN>0)
-        Mapes_xls_vector2=obj;
-        Mapes_xls_vector2(end,2)={'BNN Method'};
-        Mapes_xls_vector2(end+1,:)= obj1;
-        for II=1:4
-            Mapes_xls_vector2(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
-            Mapes_xls_vector2(end,2)={num2str(II)};
-            Mapes_xls_vector2(end,3)={num2str(corp.BNN.Mapes.Total(lct,II))};
-            for I=1:length(corp.zone)
-                Mapes_xls_vector2(end,3+I)={num2str(corp.zone{1, I}.BNN.Mapes.Total(lct,II))};
+        
+        
+        if(flgBNN>0)
+            Mapes_xls_vector2=obj;
+            Mapes_xls_vector2(end,2)={'BNN Method'};
+            Mapes_xls_vector2(end+1,:)= obj1;
+            for II=1:4
+                Mapes_xls_vector2(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
+                Mapes_xls_vector2(end,2)={num2str(II)};
+                Mapes_xls_vector2(end,3)={num2str(corp.BNN.Mapes.Total(lct,II))};
+                for I=1:length(corp.zone)
+                    Mapes_xls_vector2(end,3+I)={num2str(corp.zone{1, I}.BNN.Mapes.Total(lct,II))};
+                end
             end
+            %         Mapes_xls_vector2=[Mapes_xls_vector2 {' '} {' '} {' '} {' '} ];
         end
-%         Mapes_xls_vector2=[Mapes_xls_vector2 {' '} {' '} {' '} {' '} ];
-    end
-    
-    
-    if(flgNeuro>0)
-        Mapes_xls_vector3=obj;
-        Mapes_xls_vector3(end,2)={'Neuro-Fuzzy Method'};
-        Mapes_xls_vector3(end+1,:)= obj1;
-        for II=1:4
-            Mapes_xls_vector3(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
-            Mapes_xls_vector3(end,2)={num2str(II)};
-            Mapes_xls_vector3(end,3)={num2str(corp.Neuro.Mapes.Total(lct,II))};
-            for I=1:length(corp.zone)
-                Mapes_xls_vector3(end,3+I)={num2str(corp.zone{1, I}.Neuro.Mapes.Total(lct,II))};
+        
+        
+        if(flgNeuro>0)
+            Mapes_xls_vector3=obj;
+            Mapes_xls_vector3(end,2)={'Neuro-Fuzzy Method'};
+            Mapes_xls_vector3(end+1,:)= obj1;
+            for II=1:4
+                Mapes_xls_vector3(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
+                Mapes_xls_vector3(end,2)={num2str(II)};
+                Mapes_xls_vector3(end,3)={num2str(corp.Neuro.Mapes.Total(lct,II))};
+                for I=1:length(corp.zone)
+                    Mapes_xls_vector3(end,3+I)={num2str(corp.zone{1, I}.Neuro.Mapes.Total(lct,II))};
+                end
             end
+            %         Mapes_xls_vector3=[Mapes_xls_vector3 {' '} {' '} {' '} {' '} ];
         end
-%         Mapes_xls_vector3=[Mapes_xls_vector3 {' '} {' '} {' '} {' '} ];
-    end
-    
-    
-    if(flgLSQ>0)
-        Mapes_xls_vector4=obj;
-        Mapes_xls_vector4(end,2)={'BNN Method'};
-        Mapes_xls_vector4(end+1,:)= obj1;
-        for II=1:4
-            Mapes_xls_vector4(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
-            Mapes_xls_vector4(end,2)={num2str(II)};
-            Mapes_xls_vector4(end,3)={num2str(corp.LSQ.Mapes.Total(lct,II))};
-            for I=1:length(corp.zone)
-                Mapes_xls_vector4(end,3+I)={num2str(corp.zone{1, I}.LSQ.Mapes.Total(lct,II))};
+        
+        
+        if(flgLSQ>0)
+            Mapes_xls_vector4=obj;
+            Mapes_xls_vector4(end,2)={'BNN Method'};
+            Mapes_xls_vector4(end+1,:)= obj1;
+            for II=1:4
+                Mapes_xls_vector4(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
+                Mapes_xls_vector4(end,2)={num2str(II)};
+                Mapes_xls_vector4(end,3)={num2str(corp.LSQ.Mapes.Total(lct,II))};
+                for I=1:length(corp.zone)
+                    Mapes_xls_vector4(end,3+I)={num2str(corp.zone{1, I}.LSQ.Mapes.Total(lct,II))};
+                end
             end
+            %         Mapes_xls_vector4=[Mapes_xls_vector4 {' '} {' '} {' '} {' '} ];
         end
-%         Mapes_xls_vector4=[Mapes_xls_vector4 {' '} {' '} {' '} {' '} ];
+        Mapes_xls_vector=[Mapes_xls_vector;Mapes_xls_vector1 Mapes_xls_vector2 Mapes_xls_vector3 Mapes_xls_vector4];
+        Mapes_xls_vector=[Mapes_xls_vector;cell(5,size(Mapes_xls_vector,2))];
+        
     end
-    Mapes_xls_vector=[Mapes_xls_vector;Mapes_xls_vector1 Mapes_xls_vector2 Mapes_xls_vector3 Mapes_xls_vector4];
-    Mapes_xls_vector=[Mapes_xls_vector;cell(5,size(Mapes_xls_vector,2))];
-    
-end
 end
 
 %% Write to Excel
@@ -687,11 +687,11 @@ xlswrite(mh_xls_filename,Interchange_xls_vector,'Interchange');
 xlswrite(mh_xls_filename,Industrial_xls_vector,'Industrial');
 xlswrite(mh_xls_filename,Pump_xls_vector,'Pump');
 if sum(sum(isnan(corp.Neuro.Errors.Manategh)))==0
-xlswrite(mh_xls_filename,Errors_xls_vector,'Errors');
-xlswrite(mh_xls_filename,Mapes_xls_vector,'Mapes');
+    xlswrite(mh_xls_filename,Errors_xls_vector,'Errors');
+    xlswrite(mh_xls_filename,Mapes_xls_vector,'Mapes');
 end
 xlswrite(mh_xls_filename,Total_xls_vector,'Total');
-NAME = [cd '\' mh_xls_filename]; 
+NAME = [cd '\' mh_xls_filename];
 excelObj = actxserver('Excel.Application');
 excelWorkbook = excelObj.workbooks.Open(NAME);
 worksheets = excelObj.sheets;
