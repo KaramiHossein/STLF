@@ -8,7 +8,7 @@ for I=1:length(corp.zone)
     A=InputData.Zone{1,I}.Load.Manategh;
     
     weatherdata=InputData.Zone{1,I}.Weather;
-    
+
     if isempty(weatherdata.Temp)
         TT=weatherdata.Temp;
     else

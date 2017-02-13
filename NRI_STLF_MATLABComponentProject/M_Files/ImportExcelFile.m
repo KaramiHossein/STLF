@@ -1,9 +1,9 @@
 % ImportData
 function ImportExcelFile(AppPath,address,yy,mm,dd)
-DailyData=xlsread(address,'„‰«ÿﬁ');
-InterchangeData=xlsread(address,'«—”«·Ì »—Ê‰ „—“Ì');
+DailyData=xlsread(address,'?????');
+InterchangeData=xlsread(address,'?????? ???? ????');
 % % InterchangeData=sum(InterchangeData(:,1:24));
-IndustrialData=xlsread(address,'’‰«Ì⁄');
+IndustrialData=xlsread(address,'?????');
 % DailyData=xlsread(address,'MANATEGH');
 % InterchangeData=xlsread(address,'Ersali Boroon Marzi');
 % InterchangeData=sum(InterchangeData(:,1:24));
