@@ -14,15 +14,19 @@ InputData = ReadData(yy1,N,corp,AppPath);
 
 if(flgSimilar>0)
     corp=LoadForecastingsimilar_new(yy,mm,dd,days,corp,InputData);
+    corp=LoadForecastingPeakPredict(yy,mm,dd,days,corp,InputData,'Similar');
 end
 if(flgBNN>0)
     corp=BNNSTLF6_Zone(yy,mm,dd,days,corp,InputData);
+    corp=LoadForecastingPeakPredict(yy,mm,dd,days,corp,InputData,'BNN');
 end
 if(flgNeuro>0)
     corp=LoadForecastingNeuroFuzzy_new(yy,mm,dd,days,corp,InputData);
+    corp=LoadForecastingPeakPredict(yy,mm,dd,days,corp,InputData,'Neuro');
 end
-if(flgLSQ>0)            
+if(flgLSQ>0)
     corp=LoadForecastingLSQ_new(yy,mm,dd,days,corp,InputData,N,flgSimilar,flgBNN,flgNeuro);
+    corp=LoadForecastingPeakPredict(yy,mm,dd,days,corp,InputData,'LSQ');
 end
 
 % find selected day
@@ -31,9 +35,9 @@ knew=find((InputData.Zone{1,1}.Load.Interchange(:,1)==yy)&(InputData.Zone{1,1}.L
 
 zoneNo=length(corp.zone);
 actualC = [];
-for k=1:days    
+for k=1:days
     actual = [];
-    for z = 1:zoneNo       
+    for z = 1:zoneNo
         actual=[ actual; InputData.Zone{1,z}.Load.Manategh(i+k-1,6:29)];
         if ~strcmp(corp.name,'system')
             actual(end,:)=actual(end,:)+InputData.Zone{1,z}.Load.Interchange(knew+k-1,6:29)+InputData.Zone{1,z}.Load.Pump(knew+k-1,6:29)+InputData.Zone{1,z}.Load.Industrial(knew+k-1,6:29);
@@ -45,14 +49,4 @@ for k=1:days
     actualC = [actualC; TotActual];
 end
 
-
 PredictionOutput(corp,[InputData.cal.calH(i:i+days-1,1:5) actualC], days, flgSimilar, flgBNN, flgNeuro, flgLSQ);
-
-
-
-
-
-
-
-
-

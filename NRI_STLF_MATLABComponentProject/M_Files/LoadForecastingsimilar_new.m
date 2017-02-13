@@ -37,7 +37,7 @@ daysramezan=zeros(1,size(InputData.cal.calH,1));
 ll=find(Adays==16); % find first day of ramezan
 ll2 = find(Adays==14); %find eid fetr
 %if ramezan be in first month
-if(ll2(1)<ll(1))
+if (ll2(1)<ll(1))
     daysramezan(1:(ll2(1)-1))=1;
 end
 for i=1:length(ll)
@@ -114,7 +114,7 @@ for z = 1:zoneNo
         Prediction.Manategh=[Prediction.Manategh; prediction];
         Mapes.Manategh=[Mapes.Manategh;mapes];
         Errors.Manategh=[Errors.Manategh;errors];
-        
+
         if ~strcmp(corp.name,'system')
             knew=find((InputData.Zone{1,z}.Load.Interchange(:,1)==yy2)&(InputData.Zone{1,z}.Load.Interchange(:,2)==mm2)&(InputData.Zone{1,z}.Load.Interchange(:,3)==dd2));
             
@@ -137,7 +137,7 @@ for z = 1:zoneNo
             PredictionPump=[PUMP(knew,6:6+hhh-1) mean(PUMP(-3+knew:-1+knew,6+hhh:29))];
             PredictionIndustrial=[INDUSTRIAL(knew,6:6+hhh-1) mean(INDUSTRIAL(-7+knew:knew-1,6+hhh:29))];
             PredictionInterchange=[INTERCHANGE(knew,6:6+hhh-1) mean(INTERCHANGE(-7+knew:knew-1,6+hhh:29))];
-            
+
             ActualPump=InputData.Zone{1,z}.Load.Pump(knew,6:29);
             ActualIndustrial=InputData.Zone{1,z}.Load.Industrial(knew,6:29);
             ActualInterchange=InputData.Zone{1,z}.Load.Interchange(knew,6:29);
