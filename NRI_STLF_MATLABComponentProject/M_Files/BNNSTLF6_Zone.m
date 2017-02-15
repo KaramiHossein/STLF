@@ -61,7 +61,7 @@ for z=1:zoneNo
         Mapes.Manategh=[Mapes.Manategh;mapes];
         Errors.Manategh=[Errors.Manategh;errors];
         
-        if ~strcmp(corp.name,'system')
+%         if ~strcmp(corp.name,'system')
             knew=find((InputData.Zone{1,z}.Load.Interchange(:,1)==yy2)&(InputData.Zone{1,z}.Load.Interchange(:,2)==mm2)&(InputData.Zone{1,z}.Load.Interchange(:,3)==dd2));
             
             INDUSTRIAL=InputData.Zone{1,z}.Load.Industrial;
@@ -110,14 +110,14 @@ for z=1:zoneNo
             Prediction.Total=[Prediction.Total; PredictTotal];
             Mapes.Total=[Mapes.Total;mapesTotal];
             Errors.Total=[Errors.Total;errorsTotal];
-        else
-            Prediction.Total=[Prediction.Manategh];
-            Mapes.Total=[Mapes.Manategh];
-            Errors.Total=[Errors.Manategh];
-            Prediction.Manategh=[];
-            Mapes.Manategh=[];
-            Errors.Manategh=[];
-        end
+%         else
+%             Prediction.Total=[Prediction.Manategh];
+%             Mapes.Total=[Mapes.Manategh];
+%             Errors.Total=[Errors.Manategh];
+%             Prediction.Manategh=[];
+%             Mapes.Manategh=[];
+%             Errors.Manategh=[];
+%         end
         
         
         if (k<size(InputData.Zone{1,z}.Load.Manategh,1))
@@ -130,79 +130,82 @@ for z=1:zoneNo
     corp.zone{1,z}.BNN.Mapes=Mapes;
     corp.zone{1,z}.BNN.Errors=Errors;
 end
-
-% summation of zones for corp
-MapesFinal.Manategh=[];
-errorsFinal.Manategh=[];
-MapesFinal.Industrial=[];
-errorsFinal.Industrial=[];
-MapesFinal.Interchange=[];
-errorsFinal.Interchange=[];
-MapesFinal.Pump=[];
-errorsFinal.Pump=[];
-MapesFinal.Total=[];
-errorsFinal.Total=[];
-FinalPredict.Manategh=[];
-FinalPredict.Industrial=[];
-FinalPredict.Interchange=[];
-FinalPredict.Pump=[];
-FinalActual.Manategh=[];
-FinalActual.Industrial=[];
-FinalActual.Interchange=[];
-FinalActual.Pump=[];
-knew=find((InputData.Zone{1,z}.Load.Interchange(:,1)==yy)&(InputData.Zone{1,z}.Load.Interchange(:,2)==mm)&(InputData.Zone{1,z}.Load.Interchange(:,3)==dd));
-
-for k=1:days
-    A1=0;
-    A2=0;
-    A3=0;
-    A4=0;
-    A5=0;
-    A6=0;
-    A7=0;
-    A8=0;
-    for z=1:zoneNo
-        A1=A1+corp.zone{1,z}.BNN.Predict.Manategh(k,1:24);
-        A2=A2+corp.zone{1,z}.BNN.Predict.Industrial(k,1:24);
-        A3=A3+corp.zone{1,z}.BNN.Predict.Interchange(k,1:24);
-        A4=A4+corp.zone{1,z}.BNN.Predict.Pump(k,1:24);
-        A5=A5+InputData.Zone{1,z}.Load.Manategh(lct+k-1,6:29);
-        A6=A6+InputData.Zone{1,z}.Load.Industrial(knew-1+k-1,6:29);
-        A7=A7+InputData.Zone{1,z}.Load.Interchange(knew-1+k-1,6:29);
-        A8=A8+InputData.Zone{1,z}.Load.Pump(knew-2+k-1,6:29);
+if ~strcmp(corp.name,'system')
+    % summation of zones for corp
+    MapesFinal.Manategh=[];
+    errorsFinal.Manategh=[];
+    MapesFinal.Industrial=[];
+    errorsFinal.Industrial=[];
+    MapesFinal.Interchange=[];
+    errorsFinal.Interchange=[];
+    MapesFinal.Pump=[];
+    errorsFinal.Pump=[];
+    MapesFinal.Total=[];
+    errorsFinal.Total=[];
+    FinalPredict.Manategh=[];
+    FinalPredict.Industrial=[];
+    FinalPredict.Interchange=[];
+    FinalPredict.Pump=[];
+    FinalActual.Manategh=[];
+    FinalActual.Industrial=[];
+    FinalActual.Interchange=[];
+    FinalActual.Pump=[];
+    knew=find((InputData.Zone{1,z}.Load.Interchange(:,1)==yy)&(InputData.Zone{1,z}.Load.Interchange(:,2)==mm)&(InputData.Zone{1,z}.Load.Interchange(:,3)==dd));
+    
+    for k=1:days
+        A1=0;
+        A2=0;
+        A3=0;
+        A4=0;
+        A5=0;
+        A6=0;
+        A7=0;
+        A8=0;
+        for z=1:zoneNo
+            A1=A1+corp.zone{1,z}.BNN.Predict.Manategh(k,1:24);
+            A2=A2+corp.zone{1,z}.BNN.Predict.Industrial(k,1:24);
+            A3=A3+corp.zone{1,z}.BNN.Predict.Interchange(k,1:24);
+            A4=A4+corp.zone{1,z}.BNN.Predict.Pump(k,1:24);
+            A5=A5+InputData.Zone{1,z}.Load.Manategh(lct+k-1,6:29);
+            A6=A6+InputData.Zone{1,z}.Load.Industrial(knew-1+k-1,6:29);
+            A7=A7+InputData.Zone{1,z}.Load.Interchange(knew-1+k-1,6:29);
+            A8=A8+InputData.Zone{1,z}.Load.Pump(knew-2+k-1,6:29);
+        end
+        
+        FinalPredict.Manategh=[FinalPredict.Manategh;A1];
+        FinalPredict.Industrial=[FinalPredict.Industrial;A2];
+        FinalPredict.Interchange=[FinalPredict.Interchange;A3];
+        FinalPredict.Pump=[FinalPredict.Pump;A4];
+        FinalActual.Manategh=[FinalActual.Manategh;A5];
+        FinalActual.Industrial=[FinalActual.Industrial;A6];
+        FinalActual.Interchange=[FinalActual.Interchange;A7];
+        FinalActual.Pump=[FinalActual.Pump;A8];
+        
+        [mapes, errors] = calcError(FinalPredict.Manategh,FinalActual.Manategh,InputData.cal.calH(lct+k-1,2));
+        MapesFinal.Manategh=[MapesFinal.Manategh;mapes];
+        errorsFinal.Manategh=[errorsFinal.Manategh;errors];
+        
+        [mapes, errors] = calcError(FinalPredict.Pump,FinalActual.Pump,InputData.cal.calH(lct+k-1,2));
+        MapesFinal.Pump=[MapesFinal.Pump;mapes];
+        errorsFinal.Pump=[errorsFinal.Pump;errors];
+        
+        [mapes, errors] = calcError(FinalPredict.Interchange,FinalActual.Interchange,InputData.cal.calH(lct+k-1,2));
+        MapesFinal.Interchange=[MapesFinal.Interchange;mapes];
+        errorsFinal.Interchange=[errorsFinal.Interchange;errors];
+        
+        [mapes, errors] = calcError(FinalPredict.Industrial,FinalActual.Industrial,InputData.cal.calH(lct+k-1,2));
+        MapesFinal.Industrial=[MapesFinal.Industrial;mapes];
+        errorsFinal.Industrial=[errorsFinal.Industrial;errors];
+        
+        [mapes, errors] = calcError(FinalPredict.Manategh+FinalPredict.Industrial+FinalPredict.Pump+FinalPredict.Interchange,FinalActual.Manategh+FinalActual.Industrial+FinalActual.Pump+FinalActual.Interchange,InputData.cal.calH(lct+k-1,2));
+        MapesFinal.Total=[MapesFinal.Total;mapes];
+        errorsFinal.Total=[errorsFinal.Total;errors];
+        
     end
-    
-    FinalPredict.Manategh=[FinalPredict.Manategh;A1];
-    FinalPredict.Industrial=[FinalPredict.Industrial;A2];
-    FinalPredict.Interchange=[FinalPredict.Interchange;A3];
-    FinalPredict.Pump=[FinalPredict.Pump;A4];
-    FinalActual.Manategh=[FinalActual.Manategh;A5];
-    FinalActual.Industrial=[FinalActual.Industrial;A6];
-    FinalActual.Interchange=[FinalActual.Interchange;A7];
-    FinalActual.Pump=[FinalActual.Pump;A8];
-    
-    [mapes, errors] = calcError(FinalPredict.Manategh,FinalActual.Manategh,InputData.cal.calH(lct+k-1,2));
-    MapesFinal.Manategh=[MapesFinal.Manategh;mapes];
-    errorsFinal.Manategh=[errorsFinal.Manategh;errors];
-    
-    [mapes, errors] = calcError(FinalPredict.Pump,FinalActual.Pump,InputData.cal.calH(lct+k-1,2));
-    MapesFinal.Pump=[MapesFinal.Pump;mapes];
-    errorsFinal.Pump=[errorsFinal.Pump;errors];
-    
-    [mapes, errors] = calcError(FinalPredict.Interchange,FinalActual.Interchange,InputData.cal.calH(lct+k-1,2));
-    MapesFinal.Interchange=[MapesFinal.Interchange;mapes];
-    errorsFinal.Interchange=[errorsFinal.Interchange;errors];
-    
-    [mapes, errors] = calcError(FinalPredict.Industrial,FinalActual.Industrial,InputData.cal.calH(lct+k-1,2));
-    MapesFinal.Industrial=[MapesFinal.Industrial;mapes];
-    errorsFinal.Industrial=[errorsFinal.Industrial;errors];
-    
-    [mapes, errors] = calcError(FinalPredict.Manategh+FinalPredict.Industrial+FinalPredict.Pump+FinalPredict.Interchange,FinalActual.Manategh+FinalActual.Industrial+FinalActual.Pump+FinalActual.Interchange,InputData.cal.calH(lct+k-1,2));
-    MapesFinal.Total=[MapesFinal.Total;mapes];
-    errorsFinal.Total=[errorsFinal.Total;errors];
-
+    FinalPredict.Total=FinalPredict.Manategh+FinalPredict.Industrial+FinalPredict.Pump+FinalPredict.Interchange;
+    corp.BNN.Predict=FinalPredict;
+    corp.BNN.Mapes = MapesFinal;
+    corp.BNN.Errors = errorsFinal;
+else
+    corp.BNN=corp.zone{1, 1}.BNN;
 end
-FinalPredict.Total=FinalPredict.Manategh+FinalPredict.Industrial+FinalPredict.Pump+FinalPredict.Interchange;
-corp.BNN.Predict=FinalPredict;
-corp.BNN.Mapes = MapesFinal;
-corp.BNN.Errors = errorsFinal;
