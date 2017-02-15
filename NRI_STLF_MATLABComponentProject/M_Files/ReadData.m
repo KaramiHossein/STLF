@@ -8,12 +8,18 @@ for zone=1:ZoneNo
     Data.Zone{1,zone}.Load.Manategh=[];
     Data.Zone{1,zone}.Load.Industrial=[];
     Data.Zone{1,zone}.Load.Interchange=[];
-%     Data.Zone{1,zone}.Load.Peak=[];
+    %     Data.Zone{1,zone}.Load.Peak=[];
     Data.Zone{1,zone}.Load.Pump=[];
     Data.Zone{1,zone}.flag=[];
-    Data.Zone{1,zone}.Weather.Nebulosity=cell(1,1);
-    Data.Zone{1,zone}.Weather.Humidity=cell(1,1);
-    Data.Zone{1,zone}.Weather.Temp=cell(1,1);
+    if isempty(corp.zone{1, zone}.weathername)
+        Data.Zone{1,zone}.Weather.Nebulosity={};
+        Data.Zone{1,zone}.Weather.Humidity={};
+        Data.Zone{1,zone}.Weather.Temp={};
+    else
+        Data.Zone{1,zone}.Weather.Nebulosity=cell(1,1);
+        Data.Zone{1,zone}.Weather.Humidity=cell(1,1);
+        Data.Zone{1,zone}.Weather.Temp=cell(1,1);
+    end
 end
 
 loadDataPath=[AppPath,'\LoadData'];
@@ -36,6 +42,9 @@ for i=yy-N:yy
             name1=[name0,num2str(i),'.xlsx'];
             A1=xlsread(name1,corp.zone{zone}.name);
         end
+        if size(A1,2)<31
+            A1(end,31)=nan(1,1);
+        end
         Data.Zone{1,zone}.Load.Manategh=[Data.Zone{1,zone}.Load.Manategh; A1(:,1:31)];
         
         %% Load Industrial Data
@@ -46,7 +55,22 @@ for i=yy-N:yy
                 A2=xlsread(name1,corp.zone{zone}.name);
             else
                 name1=[name1,'x'];
-                A2=xlsread(name1,corp.zone{zone}.name);
+                if strcmp(corp_name,'system') || strcmp(corp_name,'manategh')
+                    excelObj = actxserver('Excel.Application');
+                    excelWorkbook = excelObj.workbooks.Open([cd '\' name1]);
+                    worksheets = excelObj.sheets;
+                    numSheets = worksheets.Count;
+                    A2=0;
+                    for II=1:numSheets
+                        A2=A2+xlsread(name1,worksheets.Item(II).Name);
+                        if size(A2,2)<31
+                            A2(end,31)=nan(1,1);
+                        end
+                    end
+                    A2(:,1:5)=A2(:,1:5)/numSheets;
+                else
+                    A2=xlsread(name1,corp.zone{zone}.name);
+                end
             end
             if size(A2,2)<31
                 A2(end,31)=nan(1,1);
@@ -62,7 +86,22 @@ for i=yy-N:yy
                 A3=xlsread(name1,corp.zone{zone}.name);
             else
                 name1=[name1,'x'];
-                A3=xlsread(name1,corp.zone{zone}.name);
+                if strcmp(corp_name,'system') || strcmp(corp_name,'manategh')
+                    excelObj = actxserver('Excel.Application');
+                    excelWorkbook = excelObj.workbooks.Open([cd '\' name1]);
+                    worksheets = excelObj.sheets;
+                    numSheets = worksheets.Count;
+                    A3=0;
+                    for II=1:numSheets
+                        A3=A3+xlsread(name1,worksheets.Item(II).Name);
+                        if size(A3,2)<31
+                            A3(end,31)=nan(1,1);
+                        end
+                    end
+                    A3(:,1:5)=A3(:,1:5)/numSheets;
+                else
+                    A3=xlsread(name1,corp.zone{zone}.name);
+                end
             end
             if size(A3,2)<31
                 A3(end,31)=nan(1,1);
@@ -70,17 +109,17 @@ for i=yy-N:yy
             Data.Zone{1,zone}.Load.Interchange=[Data.Zone{1,zone}.Load.Interchange; A3(:,1:31)];
         end
         
-%         %% Load Peak Data
-%         A4=[];
-%         name1=['L_Peak',num2str(i),'.xls'];
-%         if(exist(name1)>0)
-%             A4=xlsread(name1,corp.zone{zone}.name);
-%         else
-%             name1=[name1,'x'];
-%             A4=xlsread(name1,corp.zone{zone}.name);
-%         end
-%         Data.Zone{1,zone}.Load.Peak=[Data.Zone{1,zone}.Load.Peak; A4(:,1:7)];
-%         
+        %         %% Load Peak Data
+        %         A4=[];
+        %         name1=['L_Peak',num2str(i),'.xls'];
+        %         if(exist(name1)>0)
+        %             A4=xlsread(name1,corp.zone{zone}.name);
+        %         else
+        %             name1=[name1,'x'];
+        %             A4=xlsread(name1,corp.zone{zone}.name);
+        %         end
+        %         Data.Zone{1,zone}.Load.Peak=[Data.Zone{1,zone}.Load.Peak; A4(:,1:7)];
+        %
         %% Load Pump Data
         if i>yy-2
             A5=[];
@@ -89,7 +128,22 @@ for i=yy-N:yy
                 A5=xlsread(name1,corp.zone{zone}.name);
             else
                 name1=[name1,'x'];
-                A5=xlsread(name1,corp.zone{zone}.name);
+                if strcmp(corp_name,'system') || strcmp(corp_name,'manategh')
+                    excelObj = actxserver('Excel.Application');
+                    excelWorkbook = excelObj.workbooks.Open([cd '\' name1]);
+                    worksheets = excelObj.sheets;
+                    numSheets = worksheets.Count;
+                    A5=0;
+                    for II=1:numSheets
+                        A5=A5+xlsread(name1,worksheets.Item(II).Name);
+                        if size(A5,2)<31
+                            A5(end,31)=nan(1,1);
+                        end
+                    end
+                    A5(:,1:5)=A5(:,1:5)/numSheets;
+                else
+                    A5=xlsread(name1,corp.zone{zone}.name);
+                end
             end
             if size(A5,2)<31
                 A5(end,31)=nan(1,1);
