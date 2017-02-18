@@ -127,7 +127,7 @@ obj1 = obj;
 obj1(1,1)={['Date']};
 obj1(1,2)={['Hour']};
 obj1(1,3)={['Sum']};
-if strcmp(corp.name,'totalmanategh')
+if ~strcmp(corp.name,'system')
 for I=1:length(corp.zone)
     obj1(1,3+I)={corp.zone{1,I}.name};
 end
@@ -156,7 +156,7 @@ for lct=1:days
                 Total_xls_vector1(end,2)={'Day Peak'};
             end
             Total_xls_vector1(end,3)={num2str(corp.Similar.Predict.Total(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Total_xls_vector1(end,3+I)={num2str(corp.zone{1, I}.Similar.Predict.Total(lct,II))};
             end
@@ -180,7 +180,7 @@ for lct=1:days
                 Total_xls_vector2(end,2)={'Day Peak'};
             end
             Total_xls_vector2(end,3)={num2str(corp.BNN.Predict.Total(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Total_xls_vector2(end,3+I)={num2str(corp.zone{1, I}.BNN.Predict.Total(lct,II))};
             end
@@ -204,7 +204,7 @@ for lct=1:days
                 Total_xls_vector3(end,2)={'Day Peak'};
             end
             Total_xls_vector3(end,3)={num2str(corp.Neuro.Predict.Total(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Total_xls_vector3(end,3+I)={num2str(corp.zone{1, I}.Neuro.Predict.Total(lct,II))};
             end
@@ -228,7 +228,7 @@ for lct=1:days
                 Total_xls_vector4(end,2)={'Day Peak'};
             end
             Total_xls_vector4(end,3)={num2str(corp.LSQ.Predict.Total(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Total_xls_vector4(end,3+I)={num2str(corp.zone{1, I}.LSQ.Predict.Total(lct,II))};
             end
@@ -265,7 +265,7 @@ for lct=1:days
                 Manategh_xls_vector1(end,2)={'Day Peak'};
             end
             Manategh_xls_vector1(end,3)={num2str(corp.Similar.Predict.Manategh(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Manategh_xls_vector1(end,3+I)={num2str(corp.zone{1, I}.Similar.Predict.Manategh(lct,II))};
             end
@@ -289,7 +289,7 @@ for lct=1:days
                 Manategh_xls_vector2(end,2)={'Day Peak'};
             end
             Manategh_xls_vector2(end,3)={num2str(corp.BNN.Predict.Manategh(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Manategh_xls_vector2(end,3+I)={num2str(corp.zone{1, I}.BNN.Predict.Manategh(lct,II))};
             end
@@ -313,7 +313,7 @@ for lct=1:days
                 Manategh_xls_vector3(end,2)={'Day Peak'};
             end
             Manategh_xls_vector3(end,3)={num2str(corp.Neuro.Predict.Manategh(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Manategh_xls_vector3(end,3+I)={num2str(corp.zone{1, I}.Neuro.Predict.Manategh(lct,II))};
             end
@@ -337,7 +337,7 @@ for lct=1:days
                 Manategh_xls_vector4(end,2)={'Day Peak'};
             end
             Manategh_xls_vector4(end,3)={num2str(corp.LSQ.Predict.Manategh(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Manategh_xls_vector4(end,3+I)={num2str(corp.zone{1, I}.LSQ.Predict.Manategh(lct,II))};
             end
@@ -376,7 +376,7 @@ for lct=1:days
                 Industrial_xls_vector1(end,2)={'Day Peak'};
             end
             Industrial_xls_vector1(end,3)={num2str(corp.Similar.Predict.Industrial(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Industrial_xls_vector1(end,3+I)={num2str(corp.zone{1, I}.Similar.Predict.Industrial(lct,II))};
             end
@@ -400,7 +400,7 @@ for lct=1:days
                 Industrial_xls_vector2(end,2)={'Day Peak'};
             end
             Industrial_xls_vector2(end,3)={num2str(corp.BNN.Predict.Industrial(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Industrial_xls_vector2(end,3+I)={num2str(corp.zone{1, I}.BNN.Predict.Industrial(lct,II))};
             end
@@ -424,7 +424,7 @@ for lct=1:days
                 Industrial_xls_vector3(end,2)={'Day Peak'};
             end
             Industrial_xls_vector3(end,3)={num2str(corp.Neuro.Predict.Industrial(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Industrial_xls_vector3(end,3+I)={num2str(corp.zone{1, I}.Neuro.Predict.Industrial(lct,II))};
             end
@@ -448,7 +448,7 @@ for lct=1:days
                 Industrial_xls_vector4(end,2)={'Day Peak'};
             end
             Industrial_xls_vector4(end,3)={num2str(corp.LSQ.Predict.Industrial(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Industrial_xls_vector4(end,3+I)={num2str(corp.zone{1, I}.LSQ.Predict.Industrial(lct,II))};
             end
@@ -487,7 +487,7 @@ for lct=1:days
                 Interchange_xls_vector1(end,2)={'Day Peak'};
             end
             Interchange_xls_vector1(end,3)={num2str(corp.Similar.Predict.Interchange(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Interchange_xls_vector1(end,3+I)={num2str(corp.zone{1, I}.Similar.Predict.Interchange(lct,II))};
             end
@@ -511,7 +511,7 @@ for lct=1:days
                 Interchange_xls_vector2(end,2)={'Day Peak'};
             end
             Interchange_xls_vector2(end,3)={num2str(corp.BNN.Predict.Interchange(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Interchange_xls_vector2(end,3+I)={num2str(corp.zone{1, I}.BNN.Predict.Interchange(lct,II))};
             end
@@ -535,7 +535,7 @@ for lct=1:days
                 Interchange_xls_vector3(end,2)={'Day Peak'};
             end
             Interchange_xls_vector3(end,3)={num2str(corp.Neuro.Predict.Interchange(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Interchange_xls_vector3(end,3+I)={num2str(corp.zone{1, I}.Neuro.Predict.Interchange(lct,II))};
             end
@@ -559,7 +559,7 @@ for lct=1:days
                 Interchange_xls_vector4(end,2)={'Day Peak'};
             end
             Interchange_xls_vector4(end,3)={num2str(corp.LSQ.Predict.Interchange(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Interchange_xls_vector4(end,3+I)={num2str(corp.zone{1, I}.LSQ.Predict.Interchange(lct,II))};
             end
@@ -597,7 +597,7 @@ for lct=1:days
                 Pump_xls_vector1(end,2)={'Day Peak'};
             end
             Pump_xls_vector1(end,3)={num2str(corp.Similar.Predict.Pump(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Pump_xls_vector1(end,3+I)={num2str(corp.zone{1, I}.Similar.Predict.Pump(lct,II))};
             end
@@ -621,7 +621,7 @@ for lct=1:days
                 Pump_xls_vector2(end,2)={'Day Peak'};
             end
             Pump_xls_vector2(end,3)={num2str(corp.BNN.Predict.Pump(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Pump_xls_vector2(end,3+I)={num2str(corp.zone{1, I}.BNN.Predict.Pump(lct,II))};
             end
@@ -645,7 +645,7 @@ for lct=1:days
                 Pump_xls_vector3(end,2)={'Day Peak'};
             end
             Pump_xls_vector3(end,3)={num2str(corp.Neuro.Predict.Pump(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Pump_xls_vector3(end,3+I)={num2str(corp.zone{1, I}.Neuro.Predict.Pump(lct,II))};
             end
@@ -669,7 +669,7 @@ for lct=1:days
                 Pump_xls_vector4(end,2)={'Day Peak'};
             end
             Pump_xls_vector4(end,3)={num2str(corp.LSQ.Predict.Pump(lct,II))};
-            if strcmp(corp.name,'totalmanategh')
+            if ~strcmp(corp.name,'system')
             for I=1:length(corp.zone)
                 Pump_xls_vector4(end,3+I)={num2str(corp.zone{1, I}.LSQ.Predict.Pump(lct,II))};
             end
@@ -701,7 +701,7 @@ for lct=1:days
                 Errors_xls_vector1(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
                 Errors_xls_vector1(end,2)={num2str(II)};
                 Errors_xls_vector1(end,3)={num2str(corp.Similar.Errors.Total(lct,II))};
-                if strcmp(corp.name,'totalmanategh')
+                if ~strcmp(corp.name,'system')
                 for I=1:length(corp.zone)
                     Errors_xls_vector1(end,3+I)={num2str(corp.zone{1, I}.Similar.Errors.Total(lct,II))};
                 end
@@ -719,7 +719,7 @@ for lct=1:days
                 Errors_xls_vector2(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
                 Errors_xls_vector2(end,2)={num2str(II)};
                 Errors_xls_vector2(end,3)={num2str(corp.BNN.Errors.Total(lct,II))};
-                if strcmp(corp.name,'totalmanategh')
+                if ~strcmp(corp.name,'system')
                 for I=1:length(corp.zone)
                     Errors_xls_vector2(end,3+I)={num2str(corp.zone{1, I}.BNN.Errors.Total(lct,II))};
                 end
@@ -737,7 +737,7 @@ for lct=1:days
                 Errors_xls_vector3(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
                 Errors_xls_vector3(end,2)={num2str(II)};
                 Errors_xls_vector3(end,3)={num2str(corp.Neuro.Errors.Total(lct,II))};
-                if strcmp(corp.name,'totalmanategh')
+                if ~strcmp(corp.name,'system')
                 for I=1:length(corp.zone)
                     Errors_xls_vector3(end,3+I)={num2str(corp.zone{1, I}.Neuro.Errors.Total(lct,II))};
                 end
@@ -755,7 +755,7 @@ for lct=1:days
                 Errors_xls_vector4(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
                 Errors_xls_vector4(end,2)={num2str(II)};
                 Errors_xls_vector4(end,3)={num2str(corp.LSQ.Errors.Total(lct,II))};
-                if strcmp(corp.name,'totalmanategh')
+                if ~strcmp(corp.name,'system')
                 for I=1:length(corp.zone)
                     Errors_xls_vector4(end,3+I)={num2str(corp.zone{1, I}.LSQ.Errors.Total(lct,II))};
                 end
@@ -789,7 +789,7 @@ for lct=1:days
                 Mapes_xls_vector1(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
                 Mapes_xls_vector1(end,2)=MapeName(II,1);
                 Mapes_xls_vector1(end,3)={num2str(corp.Similar.Mapes.Total(lct,II))};
-                if strcmp(corp.name,'totalmanategh')
+                if ~strcmp(corp.name,'system')
                 for I=1:length(corp.zone)
                     Mapes_xls_vector1(end,3+I)={num2str(corp.zone{1, I}.Similar.Mapes.Total(lct,II))};
                 end
@@ -807,7 +807,7 @@ for lct=1:days
                 Mapes_xls_vector2(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
                 Mapes_xls_vector2(end,2)=MapeName(II,1);
                 Mapes_xls_vector2(end,3)={num2str(corp.BNN.Mapes.Total(lct,II))};
-                if strcmp(corp.name,'totalmanategh')
+                if ~strcmp(corp.name,'system')
                 for I=1:length(corp.zone)
                     Mapes_xls_vector2(end,3+I)={num2str(corp.zone{1, I}.BNN.Mapes.Total(lct,II))};
                 end
@@ -825,7 +825,7 @@ for lct=1:days
                 Mapes_xls_vector3(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
                 Mapes_xls_vector3(end,2)=MapeName(II,1);
                 Mapes_xls_vector3(end,3)={num2str(corp.Neuro.Mapes.Total(lct,II))};
-                if strcmp(corp.name,'totalmanategh')
+                if ~strcmp(corp.name,'system')
                 for I=1:length(corp.zone)
                     Mapes_xls_vector3(end,3+I)={num2str(corp.zone{1, I}.Neuro.Mapes.Total(lct,II))};
                 end
@@ -843,7 +843,7 @@ for lct=1:days
                 Mapes_xls_vector4(end+1,1)={[num2str(actual(lct,1)),'/',num2str(actual(lct,2)),'/',num2str(actual(lct,3))]};
                 Mapes_xls_vector4(end,2)=MapeName(II,1);
                 Mapes_xls_vector4(end,3)={num2str(corp.LSQ.Mapes.Total(lct,II))};
-                if strcmp(corp.name,'totalmanategh')
+                if ~strcmp(corp.name,'system')
                 for I=1:length(corp.zone)
                     Mapes_xls_vector4(end,3+I)={num2str(corp.zone{1, I}.LSQ.Mapes.Total(lct,II))};
                 end
